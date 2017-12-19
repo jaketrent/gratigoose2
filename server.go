@@ -2,84 +2,12 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/jaketrent/gratigoose2/trans"
 	_ "github.com/lib/pq"
-	// "github.com/jinzhu/gorm"
-	// _ "github.com/jinzhu/gorm/dialects/postgres"
 	"log"
-	"net/http"
 	"os"
-	"time"
 )
-
-type User struct {
-	Username string `json: username`
-	Password string `json: password`
-}
-
-func handleGet(c *gin.Context) {
-	message, _ := c.GetQuery("m")
-	c.String(http.StatusOK, "Get works! you sent "+message)
-}
-
-func handleOptions(c *gin.Context) {
-
-	c.Header("Allow", "POST, GET, OPTIONS")
-	c.Header("Access-Control-Allow-Origin", "*")
-	c.Header("Access-Control-Allow-Headers", "origin, content-type, accept")
-	c.Header("Content-Type", "application/json")
-	c.Status(http.StatusOK)
-}
-
-func handleVerification(c *gin.Context) {
-	var u User
-	c.BindJSON(&u)
-	c.JSON(http.StatusOK, gin.H{
-		"user": u.Username,
-		"pass": u.Password,
-	})
-}
-
-type Trans struct {
-	Id          int
-	Date        time.Time
-	Description string
-	Amt         float64
-	Created     time.Time
-	Updated     time.Time
-	Year        int
-	Month       int
-	Day         int
-}
-
-func listTransactions(c *gin.Context) {
-	db, _ := c.MustGet("db").(*sql.DB)
-	rows, err := db.Query("select id, trans_date, description, amt, created, updated, year, month, day from trans order by trans_date desc")
-
-	if err != nil {
-		log.Fatal("Error in query", err)
-	}
-
-	transs := make([]*Trans, 0)
-	for rows.Next() {
-		var trans Trans
-		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Description, &trans.Amt, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
-			log.Fatal("Access err", err)
-		}
-		transs = append(transs, &trans)
-	}
-	fmt.Printf("----- trans --- %+v", transs)
-
-	c.JSON(http.StatusOK, transs)
-}
-
-func initializeRoutes(router *gin.Engine) {
-	router.GET("/api/v1/transactions", listTransactions)
-	router.POST("/api", handleVerification)
-	router.OPTIONS("/api", handleOptions)
-	router.GET("/api", handleGet)
-}
 
 func hasDatabase(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -98,6 +26,6 @@ func main() {
 
 	router := gin.Default()
 	router.Use(hasDatabase(db))
-	initializeRoutes(router)
+	trans.Mount(router)
 	router.Run()
 }
