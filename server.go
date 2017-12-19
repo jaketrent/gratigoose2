@@ -23,6 +23,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Db unable to connect", err)
 	}
+	defer db.Close()
 
 	router := gin.Default()
 	router.Use(hasDatabase(db))
