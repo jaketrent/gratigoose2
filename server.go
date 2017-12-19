@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 type User struct {
@@ -41,14 +42,20 @@ func handleVerification(c *gin.Context) {
 }
 
 type Trans struct {
-	Id int
-	// Description string
-	// Year        int64
+	Id          int
+	Date        time.Time
+	Description string
+	Amt         float64
+	Created     time.Time
+	Updated     time.Time
+	Year        int
+	Month       int
+	Day         int
 }
 
 func listTransactions(c *gin.Context) {
 	db, _ := c.MustGet("db").(*sql.DB)
-	rows, err := db.Query("select id from trans")
+	rows, err := db.Query("select id, trans_date, description, amt, created, updated, year, month, day from trans order by trans_date desc")
 
 	if err != nil {
 		log.Fatal("Error in query", err)
@@ -57,7 +64,7 @@ func listTransactions(c *gin.Context) {
 	transs := make([]*Trans, 0)
 	for rows.Next() {
 		var trans Trans
-		if err := rows.Scan(&trans.Id); err != nil {
+		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Description, &trans.Amt, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
 			log.Fatal("Access err", err)
 		}
 		transs = append(transs, &trans)
