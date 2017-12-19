@@ -1,10 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/lib/pq"
+	// "github.com/jinzhu/gorm"
+	// _ "github.com/jinzhu/gorm/dialects/postgres"
 	"log"
 	"net/http"
 	"os"
@@ -39,33 +41,30 @@ func handleVerification(c *gin.Context) {
 }
 
 type Trans struct {
-	gorm.Model
-	ID int
+	Id int
 	// Description string
 	// Year        int64
 }
 
 func listTransactions(c *gin.Context) {
-	db, _ := c.MustGet("db").(gorm.DB)
-	// tx := db.Begin()
+	db, _ := c.MustGet("db").(*sql.DB)
+	rows, err := db.Query("select id from trans")
 
-	var model Trans
-	// var models []Trans
-	// db.Find(&models)
-	// tx.First(&model, 70)
-	fmt.Printf("%+v", db)
-	db.First(&model)
-	// log.Println("after", model)
+	if err != nil {
+		log.Fatal("Error in query", err)
+	}
 
-	// err := tx.Commit().Error
-	// if err != nil {
-	// 	log.Fatal("Error in query", err)
-	// }
-	// transs := make([]Trans, 999999)
-	// db.Find(&transs)
-	// db.Where(&Trans{Year: 2017}).Find(&transs)
-	// db.Find(&transs)
-	// c.JSON(http.StatusOK, model)
+	transs := make([]*Trans, 0)
+	for rows.Next() {
+		var trans Trans
+		if err := rows.Scan(&trans.Id); err != nil {
+			log.Fatal("Access err", err)
+		}
+		transs = append(transs, &trans)
+	}
+	fmt.Printf("----- trans --- %+v", transs)
+
+	c.JSON(http.StatusOK, transs)
 }
 
 func initializeRoutes(router *gin.Engine) {
@@ -75,7 +74,7 @@ func initializeRoutes(router *gin.Engine) {
 	router.GET("/api", handleGet)
 }
 
-func hasDatabase(db *gorm.DB) gin.HandlerFunc {
+func hasDatabase(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set("db", db)
 		c.Next()
@@ -83,19 +82,12 @@ func hasDatabase(db *gorm.DB) gin.HandlerFunc {
 }
 
 func main() {
-	dbHost := os.Getenv("DB_HOST")
-	dbUser := os.Getenv("DB_USER")
-	dbName := os.Getenv("DB_NAME")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	connStr := fmt.Sprintf("host=%v user=%v dbname=%v sslmode=disable password=%v", dbHost, dbUser, dbName, dbPassword)
-	fmt.Printf("----------connStr: %+v", connStr)
-	db, err := gorm.Open("postgres", connStr)
-	fmt.Printf("----------db: %+v", db)
+	connStr := os.Getenv("DATABASE_URL")
+	db, err := sql.Open("postgres", connStr)
+
 	if err != nil {
 		log.Fatal("Db unable to connect", err)
 	}
-	db.AutoMigrate()
-	// defer db.Close()
 
 	router := gin.Default()
 	router.Use(hasDatabase(db))
