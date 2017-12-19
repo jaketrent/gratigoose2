@@ -2,6 +2,7 @@ package trans
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -82,7 +83,40 @@ func yearMonth(c *gin.Context) {
 	}
 }
 
+type newtrans struct {
+	Data *Trans `json:"data"`
+}
+
+func create(c *gin.Context) {
+	db, _ := c.MustGet("db").(*sql.DB)
+
+	var err error
+	var trans *Trans
+	err = c.BindJSON(&trans)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "Bad transaction", Status: http.StatusBadRequest}},
+		})
+		fmt.Println("trans create req error", err)
+		return
+	}
+	trans, err = insert(db, trans)
+
+	if err == nil {
+		c.JSON(http.StatusCreated, struct {
+			Data *Trans `json:"data"`
+		}{
+			trans,
+		})
+	} else {
+		c.JSON(http.StatusInternalServerError, err)
+		fmt.Println("trans create db error", err)
+	}
+}
+
 func Mount(router *gin.Engine) {
+	router.POST("/api/v1/transactions", create)
 	router.GET("/api/v1/transactions", list)
 	router.GET("/api/v1/transactions/year/:year", year)
 	router.GET("/api/v1/transactions/year/:year/month/:month", yearMonth)

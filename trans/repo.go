@@ -1,6 +1,8 @@
 package trans
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 func findAll(db *sql.DB) ([]*Trans, error) {
 	rows, err := db.Query("select id, trans_date, description, amt, created, updated, year, month, day from trans order by trans_date desc")
@@ -57,4 +59,34 @@ func findInYearMonth(db *sql.DB, year int, month int) ([]*Trans, error) {
 		transs = append(transs, &trans)
 	}
 	return transs, nil
+}
+
+func insert(db *sql.DB, trans *Trans) (*Trans, error) {
+	const query = `
+insert into trans
+( trans_date
+, description
+, amt
+, acct_id
+, cat_id
+, year
+, month
+, day
+) values
+( $1
+, $2
+, $3
+, $4
+, $5
+, $6
+, $7
+, $8
+) returning id
+, created
+, updated
+`
+	err := db.QueryRow(query, trans.Date, trans.Description, trans.Amt,
+		trans.AcctId, trans.CatId,
+		trans.Date.Year(), trans.Date.Month(), trans.Date.Day()).Scan(&trans.Id, &trans.Created, &trans.Updated)
+	return trans, err
 }
