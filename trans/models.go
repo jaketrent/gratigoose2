@@ -3,6 +3,7 @@ package trans
 import (
 	"database/sql/driver"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -40,8 +41,21 @@ func (td *TransDate) IsSet() bool {
 }
 
 // per https://stackoverflow.com/questions/30277296/confused-about-custom-types-in-sql-when-sql-db-exec
-func (td TransDate) Value() (driver.Value, error) {
+func (td *TransDate) Value() (driver.Value, error) {
 	return time.Date(td.Year(), td.Month(), td.Day(), 0, 0, 0, 0, time.UTC), nil
+}
+
+// per https://husobee.github.io/golang/database/2015/06/12/scanner-valuer.html
+// per https://gist.github.com/jmoiron/6979540
+func (td *TransDate) Scan(value interface{}) error {
+	switch value.(type) {
+	case time.Time:
+		t := value.(time.Time)
+		*td = TransDate{time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.UTC)}
+	default:
+		return errors.New("Incompatible type for TransDate")
+	}
+	return nil
 }
 
 type Trans struct {

@@ -30,7 +30,8 @@ func list(c *gin.Context) {
 			Data: transs,
 		})
 	} else {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, bad{Errors: []clienterr{{Title: "Server error", Status: http.StatusInternalServerError}}})
+		fmt.Println("trans list error", err)
 	}
 }
 
@@ -51,7 +52,8 @@ func year(c *gin.Context) {
 			Data: transs,
 		})
 	} else {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, bad{Errors: []clienterr{{Title: "Server error", Status: http.StatusInternalServerError}}})
+		fmt.Println("trans year error", err)
 	}
 }
 
@@ -79,7 +81,8 @@ func yearMonth(c *gin.Context) {
 			Data: transs,
 		})
 	} else {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, bad{Errors: []clienterr{{Title: "Server error", Status: http.StatusInternalServerError}}})
+		fmt.Println("trans year month error", err)
 	}
 }
 
