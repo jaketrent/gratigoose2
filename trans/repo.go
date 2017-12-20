@@ -1,7 +1,10 @@
+// TODO: maybe package this as repo?  make imports nicer and naming easier
 package trans
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 )
 
 func findAll(db *sql.DB) ([]*Trans, error) {
@@ -88,5 +91,29 @@ insert into trans
 	err := db.QueryRow(query, trans.Date, trans.Description, trans.Amt,
 		trans.AcctId, trans.CatId,
 		trans.Date.Year(), trans.Date.Month(), trans.Date.Day()).Scan(&trans.Id, &trans.Created, &trans.Updated)
+	return trans, err
+}
+
+func update(db *sql.DB, trans *Trans) (*Trans, error) {
+	const query = `
+update trans
+set trans_date = $1
+, description = $2
+, amt = $3
+, acct_id = $4
+, cat_id = $5
+, year = $6
+, month = $7
+, day = $8
+where id = $9
+`
+	result, err := db.Exec(query, trans.Date, trans.Description, trans.Amt,
+		trans.AcctId, trans.CatId,
+		trans.Date.Year(), trans.Date.Month(), trans.Date.Day(), trans.Id)
+
+	count, err := result.RowsAffected()
+	if count != 1 {
+		return trans, errors.New(fmt.Sprintf("update trans modified inappropriate rows (count: %v)", count))
+	}
 	return trans, err
 }

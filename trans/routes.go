@@ -118,8 +118,52 @@ func create(c *gin.Context) {
 	}
 }
 
+func change(c *gin.Context) {
+	db, _ := c.MustGet("db").(*sql.DB)
+
+	var id int
+	var err error
+	var trans *Trans
+	err = c.BindJSON(&trans)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "Bad transaction", Status: http.StatusBadRequest}},
+		})
+		fmt.Println("trans update req error", err)
+		return
+	}
+	id, err = strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "Bad id", Status: http.StatusBadRequest}},
+		})
+		return
+	}
+	if trans.Id != id {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "URL id must match transaction id", Status: http.StatusBadRequest}},
+		})
+		fmt.Println("trans update req error", err)
+		return
+	}
+
+	trans, err = update(db, trans)
+	if err == nil {
+		c.JSON(http.StatusOK, struct {
+			Data *Trans `json:"data"`
+		}{
+			trans,
+		})
+	} else {
+		c.JSON(http.StatusInternalServerError, err)
+		fmt.Println("trans update db error", err)
+	}
+}
+
 func Mount(router *gin.Engine) {
 	router.POST("/api/v1/transactions", create)
+	router.PUT("/api/v1/transactions/:id", change)
 	router.GET("/api/v1/transactions", list)
 	router.GET("/api/v1/transactions/year/:year", year)
 	router.GET("/api/v1/transactions/year/:year/month/:month", yearMonth)
