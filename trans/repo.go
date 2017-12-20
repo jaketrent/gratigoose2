@@ -117,3 +117,17 @@ where id = $9
 	}
 	return trans, err
 }
+
+func delete(db *sql.DB, id int) error {
+	const query = `
+delete from trans
+where id = $1
+`
+	result, err := db.Exec(query, id)
+
+	count, err := result.RowsAffected()
+	if count != 1 {
+		return errors.New(fmt.Sprintf("delete trans modified inappropriate rows (count: %v)", count))
+	}
+	return err
+}

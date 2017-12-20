@@ -161,9 +161,30 @@ func change(c *gin.Context) {
 	}
 }
 
+func destroy(c *gin.Context) {
+	db, _ := c.MustGet("db").(*sql.DB)
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "Bad id", Status: http.StatusBadRequest}},
+		})
+		return
+	}
+
+	err = delete(db, id)
+	if err == nil {
+		c.Status(http.StatusNoContent)
+	} else {
+		c.JSON(http.StatusInternalServerError, err)
+		fmt.Println("trans destroy db error", err)
+	}
+}
+
 func Mount(router *gin.Engine) {
 	router.POST("/api/v1/transactions", create)
 	router.PUT("/api/v1/transactions/:id", change)
+	router.DELETE("/api/v1/transactions/:id", destroy)
 	router.GET("/api/v1/transactions", list)
 	router.GET("/api/v1/transactions/year/:year", year)
 	router.GET("/api/v1/transactions/year/:year/month/:month", yearMonth)
