@@ -41,7 +41,7 @@ func (td *TransDate) IsSet() bool {
 }
 
 // per https://stackoverflow.com/questions/30277296/confused-about-custom-types-in-sql-when-sql-db-exec
-func (td *TransDate) Value() (driver.Value, error) {
+func (td TransDate) Value() (driver.Value, error) {
 	return time.Date(td.Year(), td.Month(), td.Day(), 0, 0, 0, 0, time.UTC), nil
 }
 
