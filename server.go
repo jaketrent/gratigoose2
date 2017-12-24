@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"github.com/gin-gonic/gin"
+	"github.com/jaketrent/gratigoose2/auth"
 	"github.com/jaketrent/gratigoose2/trans"
 	_ "github.com/lib/pq"
 	"log"
@@ -28,5 +29,6 @@ func main() {
 	router := gin.Default()
 	router.Use(hasDatabase(db))
 	trans.Mount(router)
+	auth.Mount(router)
 	router.Run()
 }
