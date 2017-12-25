@@ -7,6 +7,7 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type loginBody struct {
@@ -56,6 +57,22 @@ func login(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, ok{Data: loginBody{Token: tokenString}})
 
+}
+
+func IsLoggedIn(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		signingKey := []byte(os.Getenv("SECRET_KEY"))
+		bearer := c.GetHeader("Authorization")
+		token := strings.Split(bearer, " ")[1]
+		isValid, err := isTokenValid(signingKey, token)
+		if isValid {
+			c.Next()
+		} else {
+			fmt.Println("Error validating token", err)
+			c.JSON(http.StatusUnauthorized, bad{Errors: []clienterr{{Title: "Invalid token", Status: http.StatusUnauthorized}}})
+			c.Abort()
+		}
+	}
 }
 
 func Mount(router *gin.Engine) {

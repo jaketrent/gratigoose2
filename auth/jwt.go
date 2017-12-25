@@ -20,3 +20,16 @@ func createSignedToken(signingKey []byte) (string, error) {
 
 	return tokenString, err
 }
+
+func isTokenValid(signingKey []byte, tokenString string) (bool, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return signingKey, nil
+
+	})
+
+	return err == nil && token.Valid, err
+}

@@ -28,7 +28,11 @@ func main() {
 
 	router := gin.Default()
 	router.Use(hasDatabase(db))
-	trans.Mount(router)
+
 	auth.Mount(router)
+
+	router.Use(auth.IsLoggedIn(db))
+	trans.Mount(router)
+
 	router.Run()
 }
