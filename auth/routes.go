@@ -20,8 +20,8 @@ type ok struct {
 
 // TODO: extract common types
 type clienterr struct {
-	Title  string
-	Status int
+	Title  string `json:"title"`
+	Status int    `json:"status"`
 }
 
 type bad struct {
@@ -44,7 +44,7 @@ func login(c *gin.Context) {
 	isMatch := passwordMatchesHash(u.Password, passwordHash)
 
 	if !isMatch {
-		c.JSON(http.StatusUnauthorized, bad{Errors: []clienterr{{Title: "Not authorized", Status: http.StatusUnauthorized}}})
+		c.JSON(http.StatusUnauthorized, bad{Errors: []clienterr{{Title: "Invalid login", Status: http.StatusUnauthorized}}})
 		return
 	}
 

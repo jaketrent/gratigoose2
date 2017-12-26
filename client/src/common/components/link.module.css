@@ -1,0 +1,16 @@
+@import "../styles/colors.css";
+
+.root {
+  color: var(--colorLink);
+  outline: none;
+}
+.root:focus,
+.root:hover {
+  color: var(--colorLinkHover);
+  text-decoration: underline;
+  outline: none;
+}
+.rootActive {
+  composes: root;
+  color: var(--colorLinkActive);
+}

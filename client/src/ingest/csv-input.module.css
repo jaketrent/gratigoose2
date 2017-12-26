@@ -1,0 +1,15 @@
+.root {
+  
+}
+.label {
+  composes: screenreader-only from "../common/styles/accessibility.module.css";
+}
+.btn {
+  composes: button from "../common/styles/buttons.module.css";
+  font-size: 18px;
+  padding: 15px 30px;
+  margin-top: 20px;
+}
+.file {
+  composes: screenreader-only from "../common/styles/accessibility.module.css";
+}

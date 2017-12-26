@@ -1,8 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './index.css'
-import App from './app'
 import registerServiceWorker from './registerServiceWorker'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+import './index.css'
+import * as routes from './common/config/routes'
+import store from './common/store'
+
+routes.map(store.getState().routing.basePath)
 registerServiceWorker()

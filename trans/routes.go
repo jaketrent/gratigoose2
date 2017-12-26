@@ -13,8 +13,8 @@ type ok struct {
 }
 
 type clienterr struct {
-	Title  string
-	Status int // TODO: make this a union
+	Title  string `json:"title"`
+	Status int    `json:"status"` // TODO: make this a union
 }
 
 type bad struct {
