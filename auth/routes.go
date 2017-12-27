@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	_ "github.com/joho/godotenv/autoload"
 	"net/http"
 	"os"
 	"strings"
@@ -32,7 +31,7 @@ func login(c *gin.Context) {
 	db := c.MustGet("db").(*sql.DB)
 	signingKey := []byte(os.Getenv("SECRET_KEY"))
 
-	var u user
+	var u User
 	var passwordHash string
 	var err error
 	var tokenString string

@@ -15,3 +15,20 @@ where username = $1
 
 	return passwordHash, err
 }
+
+func Insert(db *sql.DB, user *User) error {
+
+	const query = `
+insert into auth_user
+( username
+, password_hash
+) values
+( $1
+, $2)
+returning created
+, updated
+`
+	_, err := db.Exec(query, user.Username, user.PasswordHash)
+
+	return err
+}

@@ -1,3 +1,6 @@
 .env*
-gratigoose2
 node_modules
+
+# binaries
+gratigoose2
+create_user
