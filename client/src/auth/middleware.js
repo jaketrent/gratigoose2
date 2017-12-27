@@ -2,8 +2,8 @@ import * as actions from './actions'
 import * as router from '../common/router'
 
 export function isLoggedIn(store, next) {
-  console.log('is logged in sess', store.getState().auth.session)
-  if (store.getState().auth.session) {
+  const session = store.getState().auth.session
+  if (session && session.token) {
     next()
   } else {
     router.redirect('/login')

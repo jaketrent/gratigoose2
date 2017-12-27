@@ -2,12 +2,11 @@ package auth
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
-	"strings"
+	"time"
 )
 
 type loginBody struct {
@@ -55,12 +54,14 @@ func login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, bad{Errors: []clienterr{{Title: "Login failed", Status: http.StatusInternalServerError}}})
 		return
 	}
+
+	c.SetCookie("gratigooseSessionId", tokenString, int(time.Now().Add(24*time.Hour).Unix()), "/", "", false, false)
 	c.JSON(http.StatusCreated, ok{Data: loginBody{Token: tokenString}})
 
 }
 
 func denyLogin(c *gin.Context, err error) {
-	fmt.Println("Error validating token", err)
+	fmt.Println("Error verifying login", err)
 	c.JSON(http.StatusUnauthorized, bad{Errors: []clienterr{{Title: "Invalid token", Status: http.StatusUnauthorized}}})
 	c.Abort()
 }
@@ -68,17 +69,16 @@ func denyLogin(c *gin.Context, err error) {
 func IsLoggedIn(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		signingKey := []byte(os.Getenv("SECRET_KEY"))
-		bearer := c.GetHeader("Authorization")
-		if bearer == "" {
-			denyLogin(c, errors.New("No Authorization header"))
+
+		cookie, err := c.Request.Cookie("gratigooseSessionId")
+		if err != nil {
+			denyLogin(c, err)
 			return
 		}
-		authParts := strings.Split(bearer, " ")
-		if len(authParts) < 2 {
-			denyLogin(c, errors.New("Malformed Authorization header"))
-			return
-		}
-		isValid, err := isTokenValid(signingKey, authParts[1])
+		token := cookie.Value
+
+		var isValid bool
+		isValid, err = isTokenValid(signingKey, token)
 		if isValid {
 			c.Next()
 		} else {
