@@ -2,6 +2,7 @@ package auth
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -58,18 +59,30 @@ func login(c *gin.Context) {
 
 }
 
+func denyLogin(c *gin.Context, err error) {
+	fmt.Println("Error validating token", err)
+	c.JSON(http.StatusUnauthorized, bad{Errors: []clienterr{{Title: "Invalid token", Status: http.StatusUnauthorized}}})
+	c.Abort()
+}
+
 func IsLoggedIn(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		signingKey := []byte(os.Getenv("SECRET_KEY"))
 		bearer := c.GetHeader("Authorization")
-		token := strings.Split(bearer, " ")[1]
-		isValid, err := isTokenValid(signingKey, token)
+		if bearer == "" {
+			denyLogin(c, errors.New("No Authorization header"))
+			return
+		}
+		authParts := strings.Split(bearer, " ")
+		if len(authParts) < 2 {
+			denyLogin(c, errors.New("Malformed Authorization header"))
+			return
+		}
+		isValid, err := isTokenValid(signingKey, authParts[1])
 		if isValid {
 			c.Next()
 		} else {
-			fmt.Println("Error validating token", err)
-			c.JSON(http.StatusUnauthorized, bad{Errors: []clienterr{{Title: "Invalid token", Status: http.StatusUnauthorized}}})
-			c.Abort()
+			denyLogin(c, err)
 		}
 	}
 }
