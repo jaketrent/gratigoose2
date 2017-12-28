@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jaketrent/gratigoose2/acct"
 	"github.com/jaketrent/gratigoose2/auth"
+	"github.com/jaketrent/gratigoose2/cat"
 	"github.com/jaketrent/gratigoose2/trans"
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq"
@@ -36,6 +37,7 @@ func main() {
 	router.Use(auth.IsLoggedIn(db))
 	trans.Mount(router)
 	acct.Mount(router)
+	cat.Mount(router)
 
 	router.Run()
 }
