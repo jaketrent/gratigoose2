@@ -1,6 +1,5 @@
 @import "../styles/colors.css";
 @import "./field-errors.css";
-@import "./field.module.css"; /* include all field classes */
 @import "../styles/layers.css";
 
 :root {
@@ -9,6 +8,11 @@
   --inputMarginBottom: 7px;
 }
 
+/* all ./field.module.css classes */
+.field { composes: field from "./field.module.css"; }
+.labelText { composes: labelText from "./field.module.css"; }
+.input { composes: input from "./field.module.css"; }
+.inputTextarea { composes: inputTextarea from "./field.module.css"; }
 .dropdownContainer {
   position: relative;
 }
