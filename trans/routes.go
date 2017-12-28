@@ -150,10 +150,8 @@ func change(c *gin.Context) {
 
 	trans, err = update(db, trans)
 	if err == nil {
-		c.JSON(http.StatusOK, struct {
-			Data *Trans `json:"data"`
-		}{
-			trans,
+		c.JSON(http.StatusOK, ok{
+			Data: []*Trans{trans},
 		})
 	} else {
 		c.JSON(http.StatusInternalServerError, err)
