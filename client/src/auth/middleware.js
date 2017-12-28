@@ -3,7 +3,7 @@ import * as router from '../common/router'
 
 export function isLoggedIn(store, next) {
   const session = store.getState().auth.session
-  if (session && session.token) {
+  if (session) {
     next()
   } else {
     router.redirect('/login')
