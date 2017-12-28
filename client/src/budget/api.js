@@ -7,7 +7,7 @@ import * as transUtils from '../trans/utils'
 export const findInYearMonth = {
   formatUrl({ month, year }) {
     // TODO: mv to budget ctrl/repo
-    return `/api/v1/trans/year/${year}/month/${month}/budget`
+    return `/api/v1/budget/year/${year}/month/${month}`
   },
   request(args) {
     const { api } = args

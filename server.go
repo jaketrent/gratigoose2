@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jaketrent/gratigoose2/acct"
 	"github.com/jaketrent/gratigoose2/auth"
+	"github.com/jaketrent/gratigoose2/budget"
 	"github.com/jaketrent/gratigoose2/cat"
 	"github.com/jaketrent/gratigoose2/expected"
 	"github.com/jaketrent/gratigoose2/trans"
@@ -36,10 +37,11 @@ func main() {
 	auth.Mount(router)
 
 	router.Use(auth.IsLoggedIn(db))
-	trans.Mount(router)
 	acct.Mount(router)
+	budget.Mount(router)
 	cat.Mount(router)
 	expected.Mount(router)
+	trans.Mount(router)
 
 	router.Run()
 }

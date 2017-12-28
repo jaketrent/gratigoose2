@@ -61,7 +61,7 @@ order by trans_date desc
 	return transs, nil
 }
 
-func findInYearMonth(db *sql.DB, year int, month int) ([]*Trans, error) {
+func FindInYearMonth(db *sql.DB, year int, month int) ([]*Trans, error) {
 	rows, err := db.Query("select id, trans_date, description, amt, created, updated, year, month, day from trans where year = $1 and month = $2 order by trans_date desc", year, month)
 
 	if err != nil {

@@ -75,7 +75,7 @@ func yearMonth(c *gin.Context) {
 		return
 	}
 
-	transs, err := findInYearMonth(db, year, month)
+	transs, err := FindInYearMonth(db, year, month)
 	if err == nil {
 		c.JSON(http.StatusOK, ok{
 			Data: transs,
