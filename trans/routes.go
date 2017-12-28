@@ -182,10 +182,10 @@ func destroy(c *gin.Context) {
 }
 
 func Mount(router *gin.Engine) {
-	router.POST("/api/v1/transactions", create)
-	router.PUT("/api/v1/transactions/:id", change)
-	router.DELETE("/api/v1/transactions/:id", destroy)
-	router.GET("/api/v1/transactions", list)
-	router.GET("/api/v1/transactions/year/:year", year)
-	router.GET("/api/v1/transactions/year/:year/month/:month", yearMonth)
+	router.POST("/api/v1/trans", create)
+	router.PUT("/api/v1/trans/:id", change)
+	router.DELETE("/api/v1/trans/:id", destroy)
+	router.GET("/api/v1/trans", list)
+	router.GET("/api/v1/trans/year/:year", year)
+	router.GET("/api/v1/trans/year/:year/month/:month", yearMonth)
 }
