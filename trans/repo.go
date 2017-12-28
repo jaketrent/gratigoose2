@@ -18,7 +18,7 @@ func findAll(db *sql.DB) ([]*Trans, error) {
 	transs := make([]*Trans, 0)
 	for rows.Next() {
 		var trans Trans
-		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Description, &trans.Amt, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
+		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Desc, &trans.Amt, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
 			return nil, err
 		}
 		transs = append(transs, &trans)
@@ -27,7 +27,23 @@ func findAll(db *sql.DB) ([]*Trans, error) {
 }
 
 func findInYear(db *sql.DB, year int) ([]*Trans, error) {
-	rows, err := db.Query("select id, trans_date, description, amt, created, updated, year, month, day from trans where year = $1 order by trans_date desc", year)
+	const query = `
+select id
+, trans_date
+, description
+, amt
+, acct_id
+, cat_id
+, created
+, updated
+, year
+, month
+, day
+from trans
+where year = $1
+order by trans_date desc
+`
+	rows, err := db.Query(query, year)
 
 	if err != nil {
 		return nil, err
@@ -37,7 +53,7 @@ func findInYear(db *sql.DB, year int) ([]*Trans, error) {
 	transs := make([]*Trans, 0)
 	for rows.Next() {
 		var trans Trans
-		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Description, &trans.Amt, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
+		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Desc, &trans.Amt, &trans.AcctId, &trans.CatId, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
 			return nil, err
 		}
 		transs = append(transs, &trans)
@@ -56,7 +72,7 @@ func findInYearMonth(db *sql.DB, year int, month int) ([]*Trans, error) {
 	transs := make([]*Trans, 0)
 	for rows.Next() {
 		var trans Trans
-		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Description, &trans.Amt, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
+		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Desc, &trans.Amt, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
 			return nil, err
 		}
 		transs = append(transs, &trans)
@@ -88,7 +104,7 @@ insert into trans
 , created
 , updated
 `
-	err := db.QueryRow(query, trans.Date, trans.Description, trans.Amt,
+	err := db.QueryRow(query, trans.Date, trans.Desc, trans.Amt,
 		trans.AcctId, trans.CatId,
 		trans.Date.Year(), trans.Date.Month(), trans.Date.Day()).Scan(&trans.Id, &trans.Created, &trans.Updated)
 	return trans, err
@@ -107,7 +123,7 @@ set trans_date = $1
 , day = $8
 where id = $9
 `
-	result, err := db.Exec(query, trans.Date, trans.Description, trans.Amt,
+	result, err := db.Exec(query, trans.Date, trans.Desc, trans.Amt,
 		trans.AcctId, trans.CatId,
 		trans.Date.Year(), trans.Date.Month(), trans.Date.Day(), trans.Id)
 

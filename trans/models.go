@@ -59,15 +59,15 @@ func (td *TransDate) Scan(value interface{}) error {
 }
 
 type Trans struct {
-	Id          int         `json:"id"`
-	Date        TransDate   `json:"date"`
-	Description string      `json:"description"`
-	Amt         json.Number `json:"amt"`
-	AcctId      int         `json:"acctId"`
-	CatId       int         `json:"catId"`
-	Created     time.Time   `json:"created"`
-	Updated     time.Time   `json:"updated"`
-	Year        int         `json:"year"`
-	Month       int         `json:"month"`
-	Day         int         `json:"day"`
+	Id      int         `json:"id"`
+	Date    TransDate   `json:"date"`
+	Desc    string      `json:"desc"`
+	Amt     json.Number `json:"amt"`
+	AcctId  int         `json:"acctId"`
+	CatId   int         `json:"catId"`
+	Created time.Time   `json:"created"`
+	Updated time.Time   `json:"updated"`
+	Year    int         `json:"year"`
+	Month   int         `json:"month"`
+	Day     int         `json:"day"`
 }
