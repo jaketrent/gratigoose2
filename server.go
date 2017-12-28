@@ -6,6 +6,7 @@ import (
 	"github.com/jaketrent/gratigoose2/acct"
 	"github.com/jaketrent/gratigoose2/auth"
 	"github.com/jaketrent/gratigoose2/cat"
+	"github.com/jaketrent/gratigoose2/expected"
 	"github.com/jaketrent/gratigoose2/trans"
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq"
@@ -38,6 +39,7 @@ func main() {
 	trans.Mount(router)
 	acct.Mount(router)
 	cat.Mount(router)
+	expected.Mount(router)
 
 	router.Run()
 }

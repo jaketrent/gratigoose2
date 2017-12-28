@@ -50,6 +50,7 @@ export const updateExpected = {
   },
   serialize({ amt, expected }) {
     return {
+      // TODO: remove all but id, amt in update
       amt,
       catId: expected.cat.id,
       date: expected.date,
