@@ -1,6 +1,6 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "gratigoose-client",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "axios": "^0.13.1",
@@ -30,8 +30,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "flow": "flow"
   },
   "proxy": "http://localhost:3003",
-  "homepage": "https://gratigoose.herokuapp.com/ui"
+  "homepage": "https://gratigoose.herokuapp.com/ui",
+  "devDependencies": {
+    "flow-bin": "^0.62.0",
+    "flow-typed": "^2.2.3"
+  }
 }
