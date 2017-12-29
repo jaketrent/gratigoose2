@@ -21,6 +21,7 @@ type ok struct {
 type clienterr struct {
 	Title  string `json:"title"`
 	Status int    `json:"status"`
+	Code   string `json:"code"`
 }
 
 type bad struct {
@@ -61,8 +62,12 @@ func login(c *gin.Context) {
 }
 
 func denyLogin(c *gin.Context, err error) {
+	clientErr := clienterr{Title: "Invalid token", Status: http.StatusUnauthorized}
+	if err.Error() == "Token is expired" {
+		clientErr.Code = "TOKENEXP"
+	}
 	fmt.Println("Error verifying login", err)
-	c.JSON(http.StatusUnauthorized, bad{Errors: []clienterr{{Title: "Invalid token", Status: http.StatusUnauthorized}}})
+	c.JSON(http.StatusUnauthorized, bad{Errors: []clienterr{clientErr}})
 	c.Abort()
 }
 
