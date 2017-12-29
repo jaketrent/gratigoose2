@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 )
 
 func findAll(db *sql.DB) ([]*Trans, error) {
@@ -101,12 +102,12 @@ insert into trans
 , $7
 , $8
 ) returning id
+, trans_date
 , created
 , updated
 `
-	err := db.QueryRow(query, trans.Date, trans.Desc, trans.Amt,
-		trans.AcctId, trans.CatId,
-		trans.Date.Year(), trans.Date.Month(), trans.Date.Day()).Scan(&trans.Id, &trans.Created, &trans.Updated)
+	date := time.Date(trans.Year, time.Month(trans.Month), trans.Day, 0, 0, 0, 0, time.UTC)
+	err := db.QueryRow(query, date, trans.Desc, trans.Amt, trans.AcctId, trans.CatId, trans.Year, trans.Month, trans.Day).Scan(&trans.Id, &trans.Date, &trans.Created, &trans.Updated)
 	return trans, err
 }
 
@@ -123,9 +124,8 @@ set trans_date = $1
 , day = $8
 where id = $9
 `
-	result, err := db.Exec(query, trans.Date, trans.Desc, trans.Amt,
-		trans.AcctId, trans.CatId,
-		trans.Date.Year(), trans.Date.Month(), trans.Date.Day(), trans.Id)
+	date := time.Date(trans.Year, time.Month(trans.Month), trans.Day, 0, 0, 0, 0, time.UTC)
+	result, err := db.Exec(query, date, trans.Desc, trans.Amt, trans.AcctId, trans.CatId, trans.Year, trans.Month, trans.Day, trans.Id)
 
 	count, err := result.RowsAffected()
 	if count != 1 {

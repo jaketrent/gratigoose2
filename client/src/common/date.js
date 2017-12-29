@@ -7,5 +7,10 @@ export function format(dateStr) {
 }
 
 export function stripTz(dateStr) {
-   return dateStr.split('T')[0]
+  return dateStr.split('T')[0]
+}
+
+export function splitYMDFromJSTimestamp(dateStr) {
+  const justDate = dateStr.split('T')[0]
+  return justDate.split('-')
 }

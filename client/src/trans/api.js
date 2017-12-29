@@ -6,21 +6,22 @@ import deserializeError from '../common/api/deserialize-error'
 import * as utils from './utils'
 
 function serializeCreate({ trans }) {
+  const [year, month, day] = dateUtils.splitYMDFromJSTimestamp(trans.date)
   return {
     acctId: trans.acct.id,
     amt: currencyUtils.stripDollarSign(trans.amt),
     catId: trans.cat.id,
-    date: dateUtils.format(trans.date),
-    desc: trans.desc
-    // TODO: add cols
-    // location, checkNum, clearedDate
+    desc: trans.desc,
+    year: parseInt(year, 10),
+    month: parseInt(month, 10),
+    day: parseInt(day, 10)
   }
 }
 
 function serializeUpdate({ trans }) {
   const serialized = serializeCreate({ trans })
   return {
-    ...serialized ,
+    ...serialized,
     id: trans.id
   }
 }
