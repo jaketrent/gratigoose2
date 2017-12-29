@@ -1,3 +1,9 @@
+// @flow
+import type { Cat } from '../cat/types'
+import type { Expected } from '../expected/types'
+import type { State } from '../common/store/types'
+import type { Trans } from '../trans/types'
+
 import { connect } from 'react-redux'
 import React from 'react'
 
@@ -8,7 +14,15 @@ import SectionTitle from '../common/components/section-title'
 import Summary from './summary'
 import Title from '../common/components/title'
 
-function mapStateToProps(state) {
+type Props = {
+  cats: (?Cat)[],
+  expecteds: (?Expected)[],
+  month: ?number,
+  transs: (?Trans)[],
+  year: ?number
+}
+
+function mapStateToProps(state: State): Props {
   return {
     cats: state.cat.cats,
     expecteds: state.budget.expecteds,
@@ -18,7 +32,7 @@ function mapStateToProps(state) {
   }
 }
 
-function Budget(props) {
+function Budget(props: Props) {
   return (
     <Chrome title={<Title>Budget</Title>}>
       <Summary expecteds={props.expecteds} transs={props.transs} />
@@ -34,6 +48,6 @@ function Budget(props) {
   )
 }
 
-export default function render(store, el) {
+export default function render(_: any, el: Element) {
   renderWithState(connect(mapStateToProps)(Budget), el)
 }

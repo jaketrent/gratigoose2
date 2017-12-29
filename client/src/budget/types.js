@@ -1,4 +1,12 @@
 // @flow
+import type { Expected } from '../expected/types'
+import type { Trans } from '../trans/types'
+
+export type budget$State = {
+  expecteds: (?Expected)[],
+  transs: (?Trans)[]
+}
+
 export type budget$CreateExpected = {
   type: 'budget/CREATE_EXPECTED',
   amt: number,

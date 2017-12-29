@@ -1,4 +1,13 @@
 // @flow
+export type Cat = {
+  name: string
+}
+
+export type cat$State = {
+  cats: (?Cat)[],
+  searchedCats: (?Cat)[]
+}
+
 export type cat$FindAllAction = {
   type: 'cat/FIND_ALL'
 }
