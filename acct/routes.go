@@ -22,7 +22,15 @@ type bad struct {
 
 func list(c *gin.Context) {
 	db, _ := c.MustGet("db").(*sql.DB)
-	accts, err := findAll(db)
+	term, _ := c.GetQuery("term")
+
+	var accts []*Acct
+	var err error
+	if term != "" {
+		accts, err = search(db, term)
+	} else {
+		accts, err = findAll(db)
+	}
 
 	if err == nil {
 		c.JSON(http.StatusOK, ok{

@@ -2,6 +2,7 @@ package cat
 
 import (
 	"database/sql"
+	"strings"
 )
 
 func search(db *sql.DB, term string) ([]*Cat, error) {
@@ -14,10 +15,10 @@ select id
 , created
 , updated
 from cat
-where name like $1
-or abbrev like $1
+where lower(name) like $1
+or lower(abbrev) like $1
 `
-	rows, err := db.Query(query, "%"+term+"%")
+	rows, err := db.Query(query, "%"+strings.ToLower(term)+"%")
 
 	if err != nil {
 		return nil, err
