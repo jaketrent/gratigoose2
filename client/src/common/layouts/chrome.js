@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import Alerts from '../../alerts'
-import Debug from '../components/debug'
 import Header from '../components/header'
 import Loading from '../components/loading'
 
@@ -20,7 +19,6 @@ function renderLoading() {
 function renderApp(props) {
   return (
     <div>
-      <Debug />
       <Header title={props.title} />
       {props.children}
       <Alerts />
@@ -37,7 +35,6 @@ function render(props) {
 function Chrome(props) {
   return (
     <div>
-      <Debug />
       {render(props)}
       <Alerts />
     </div>
