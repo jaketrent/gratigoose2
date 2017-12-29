@@ -107,10 +107,8 @@ func create(c *gin.Context) {
 	trans, err = insert(db, trans)
 
 	if err == nil {
-		c.JSON(http.StatusCreated, struct {
-			Data *Trans `json:"data"`
-		}{
-			trans,
+		c.JSON(http.StatusCreated, ok{
+			Data: []*Trans{trans},
 		})
 	} else {
 		c.JSON(http.StatusInternalServerError, err)
