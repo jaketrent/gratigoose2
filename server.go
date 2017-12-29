@@ -12,6 +12,7 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq"
 	"log"
+	"net/http"
 	"os"
 )
 
@@ -32,6 +33,10 @@ func main() {
 	defer db.Close()
 
 	router := gin.Default()
+
+	router.GET("/", func(c *gin.Context) { c.Redirect(http.StatusPermanentRedirect, "/ui") })
+	router.Static("/ui", "./client/build")
+
 	router.Use(hasDatabase(db))
 
 	auth.Mount(router)
