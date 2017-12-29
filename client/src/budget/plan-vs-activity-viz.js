@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styleable from 'react-styleable'
 
-import css from './plan-vs-activity-viz.css'
+import css from './plan-vs-activity-viz.module.css'
 import { omit } from '../common/object'
 import PlanVsActivityVizD3 from './plan-vs-activity-viz-d3'
 

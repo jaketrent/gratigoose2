@@ -1,5 +1,4 @@
 @import "../styles/colors.css";
-@import "./field-errors.css";
 
 :root {
   --borderWidth: 1px;

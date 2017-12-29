@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styleable from 'react-styleable'
 
-import css from './row-options.css'
+import css from './row-options.module.css'
 
 function RowOptions(props) {
   return (

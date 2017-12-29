@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styleable from 'react-styleable'
 
-import css from './field-errors.css'
+import css from './field-errors.module.css'
 import * as errorsUtils from '../errors'
 
 function renderError(props, error, i) {

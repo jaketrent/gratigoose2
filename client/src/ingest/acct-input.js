@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styleable from 'react-styleable'
 
-import css from './acct-input.css'
+import css from './acct-input.module.css'
 
 function renderOption(props, acct, i) {
   return (
