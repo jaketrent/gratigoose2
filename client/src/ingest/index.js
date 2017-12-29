@@ -1,3 +1,10 @@
+// @flow
+import type { Dispatch } from 'redux'
+
+import type { Acct } from '../acct/types'
+import type { Cat } from '../cat/types'
+import type { Actions, State } from '../common/store/types'
+
 import { connect } from 'react-redux'
 import React from 'react'
 
@@ -12,27 +19,52 @@ import SectionTitle from '../common/components/section-title'
 import Title from '../common/components/title'
 import * as utils from './utils'
 
-function formatRows(content) {
-  return content
+function formatRows(contents: string): string[][] {
+  return contents
     .split('\n')
     .map(row => row.split(','))
     .filter(row => row.filter(cell => cell).length > 1)
 }
 
-function mapStateToProps(state) {
+type StateProps = {
+  accts: Acct[],
+  cats: Cat[]
+}
+
+function mapStateToProps(state: State): StateProps {
   return {
     accts: state.acct.accts,
     cats: state.cat.cats
   }
 }
 
-function mapDispatchToProps(dispatch) {
+type DispatchProps = {
+  upload: ({
+    acct: ?Acct,
+    cat: ?Cat,
+    columns: string[], // TODO: mv away from primitive
+    rows: string[][]
+  }) => void
+}
+
+function mapDispatchToProps(dispatch: Dispatch<Actions>): DispatchProps {
   return {
-    upload(args) { dispatch(actions.upload(args)) }
+    upload(args) {
+      dispatch(actions.upload(args))
+    }
   }
 }
 
-class Ingest extends React.Component {
+type Props = StateProps & DispatchProps
+
+type IngestState = {
+  acct: ?Acct,
+  columns: string[],
+  rows: string[][],
+  file: ?File
+}
+
+class Ingest extends React.Component<Props, IngestState> {
   constructor(props) {
     super()
     this.state = {
@@ -46,57 +78,61 @@ class Ingest extends React.Component {
     this.handleFileLoad = this.handleFileLoad.bind(this)
     this.handleFileSelect = this.handleFileSelect.bind(this)
   }
-  handleAcctSelect(evt, acct) {
+  handleAcctSelect: (SyntheticEvent<*>, Acct) => void
+  handleAcctSelect(_, acct) {
     this.setState({ acct })
   }
+  handleFileLoad: string => void // TODO: specify any
   handleFileLoad(contents) {
     this.setState({ rows: formatRows(contents) })
   }
-  handleFileSelect(file) {
+  handleFileSelect: File => void
+  handleFileSelect(file: File) {
     this.setState({ file })
   }
+  handleAlignSubmit: (SyntheticEvent<*>, any[], boolean) => void // TODO: specify any
   handleAlignSubmit(evt, columns, includesHeader = true) {
     this.setState({ columns }, _ => {
       this.props.upload({
         acct: this.state.acct,
         cat: this.props.cats.find(c => c.abbrev === utils.INGEST_CAT_ABBREV),
         columns: this.state.columns,
-        rows: includesHeader
-          ? this.state.rows.slice(1)
-          : this.state.rows
+        rows: includesHeader ? this.state.rows.slice(1) : this.state.rows
       })
 
       router.redirect('/')
     })
   }
   renderAcctInput() {
-    return this.props.accts.length > 0 && !this.state.acct
-      ? <div>
-          <SectionTitle>Select source account</SectionTitle>
-          <AcctInput accts={this.props.accts} onSelect={this.handleAcctSelect} />
-        </div>
-      : null
+    return this.props.accts.length > 0 && !this.state.acct ? (
+      <div>
+        <SectionTitle>Select source account</SectionTitle>
+        <AcctInput accts={this.props.accts} onSelect={this.handleAcctSelect} />
+      </div>
+    ) : null
   }
   renderFileInput() {
-    return this.state.acct && this.state.rows.length === 0
-      ? <div>
-          <SectionTitle>Find transactions CSV</SectionTitle>
-          <CsvInput onLoad={this.handleFileLoad} onSelect={this.handleFileSelect} />
-        </div>
-      : null
+    return this.state.acct && this.state.rows.length === 0 ? (
+      <div>
+        <SectionTitle>Find transactions CSV</SectionTitle>
+        <CsvInput
+          onLoad={this.handleFileLoad}
+          onSelect={this.handleFileSelect}
+        />
+      </div>
+    ) : null
   }
   renderTable() {
-    return this.state.rows.length > 0 && this.state.columns.length === 0
-      ? <div>
-          <SectionTitle>Identify transaction fields</SectionTitle>
-          <CsvAligner onSubmit={this.handleAlignSubmit} rows={this.state.rows}/>
-        </div>
-      : null
+    return this.state.rows.length > 0 && this.state.columns.length === 0 ? (
+      <div>
+        <SectionTitle>Identify transaction fields</SectionTitle>
+        <CsvAligner onSubmit={this.handleAlignSubmit} rows={this.state.rows} />
+      </div>
+    ) : null
   }
   render() {
     return (
-      <Chrome loadTransMeta={false}
-              title={<Title>Ingest</Title>}>
+      <Chrome loadTransMeta={false} title={<Title>Ingest</Title>}>
         {this.renderAcctInput()}
         {this.renderFileInput()}
         {this.renderTable()}
@@ -107,6 +143,6 @@ class Ingest extends React.Component {
 
 const ConnectedIngest = connect(mapStateToProps, mapDispatchToProps)(Ingest)
 
-export default function render(store, el) {
+export default function render(_: any, el: Element) {
   renderWithState(ConnectedIngest, el)
 }

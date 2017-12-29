@@ -15,10 +15,10 @@ import Summary from './summary'
 import Title from '../common/components/title'
 
 type Props = {
-  cats: (?Cat)[],
-  expecteds: (?Expected)[],
+  cats: Cat[],
+  expecteds: Expected[],
   month: ?number,
-  transs: (?Trans)[],
+  transs: Trans[],
   year: ?number
 }
 

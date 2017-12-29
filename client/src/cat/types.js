@@ -1,11 +1,12 @@
 // @flow
 export type Cat = {
-  name: string
+  name: string,
+  abbrev: string
 }
 
 export type cat$State = {
-  cats: (?Cat)[],
-  searchedCats: (?Cat)[]
+  cats: Cat[],
+  searchedCats: Cat[]
 }
 
 export type cat$FindAllAction = {
