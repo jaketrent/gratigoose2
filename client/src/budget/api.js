@@ -31,7 +31,8 @@ export const createExpected = {
     return {
       amt,
       catId: cat.id,
-      date: `${year}-${month}-01`
+      year: parseInt(year, 10),
+      month: parseInt(month, 10)
     }
   },
   request(args) {
@@ -50,10 +51,7 @@ export const updateExpected = {
   },
   serialize({ amt, expected }) {
     return {
-      // TODO: remove all but id, amt in update
       amt,
-      catId: expected.cat.id,
-      date: expected.date,
       id: expected.id
     }
   },
