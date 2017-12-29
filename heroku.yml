@@ -3,6 +3,8 @@
 build:
   languages:
     - go
+    - node
 
 run:
   web: gratigoose2
+

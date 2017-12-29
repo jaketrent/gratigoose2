@@ -1,1 +1,1 @@
-web: go build && ./gratigoose2
+web: ./bin/gratigoose2
