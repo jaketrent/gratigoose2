@@ -4,3 +4,6 @@ node_modules
 # binaries
 gratigoose2
 create_user
+
+# govendor installs
+/vendor/*/
