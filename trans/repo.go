@@ -1,4 +1,3 @@
-// TODO: maybe package this as repo?  make imports nicer and naming easier
 package trans
 
 import (
@@ -122,15 +121,14 @@ set trans_date = $1
 , year = $6
 , month = $7
 , day = $8
-where id = $9
+, updated = $9
+where id = $10
+returning updated
+, trans_date
 `
 	date := time.Date(trans.Year, time.Month(trans.Month), trans.Day, 0, 0, 0, 0, time.UTC)
-	result, err := db.Exec(query, date, trans.Desc, trans.Amt, trans.AcctId, trans.CatId, trans.Year, trans.Month, trans.Day, trans.Id)
+	err := db.QueryRow(query, date, trans.Desc, trans.Amt, trans.AcctId, trans.CatId, trans.Year, trans.Month, trans.Day, time.Now(), trans.Id).Scan(&trans.Updated, &trans.Date)
 
-	count, err := result.RowsAffected()
-	if count != 1 {
-		return trans, errors.New(fmt.Sprintf("update trans modified inappropriate rows (count: %v)", count))
-	}
 	return trans, err
 }
 
