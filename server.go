@@ -8,11 +8,11 @@ import (
 	"github.com/jaketrent/gratigoose2/budget"
 	"github.com/jaketrent/gratigoose2/cat"
 	"github.com/jaketrent/gratigoose2/expected"
+	"github.com/jaketrent/gratigoose2/static"
 	"github.com/jaketrent/gratigoose2/trans"
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq"
 	"log"
-	"net/http"
 	"os"
 )
 
@@ -34,11 +34,7 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/", func(c *gin.Context) { c.Redirect(http.StatusPermanentRedirect, "/ui") })
-	router.Static("/ui", "./client/build")
-
 	router.Use(hasDatabase(db))
-
 	auth.Mount(router)
 
 	router.Use(auth.IsLoggedIn(db))
@@ -47,6 +43,8 @@ func main() {
 	cat.Mount(router)
 	expected.Mount(router)
 	trans.Mount(router)
+
+	static.Mount(router)
 
 	router.Run()
 }
