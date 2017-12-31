@@ -34,7 +34,7 @@
     "flow": "flow"
   },
   "proxy": "http://localhost:3003",
-  "homepage": "https://gratigoose.herokuapp.com/ui",
+  "homepage": "https://gratigoose.herokuapp.com",
   "devDependencies": {
     "flow-bin": "^0.62.0",
     "flow-typed": "^2.2.3"
