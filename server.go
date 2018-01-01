@@ -34,6 +34,8 @@ func main() {
 
 	router := gin.Default()
 
+	static.Mount(router)
+
 	router.Use(hasDatabase(db))
 	auth.Mount(router)
 
@@ -43,8 +45,6 @@ func main() {
 	cat.Mount(router)
 	expected.Mount(router)
 	trans.Mount(router)
-
-	static.Mount(router)
 
 	router.Run()
 }
