@@ -24,7 +24,6 @@ function renderHeaderData(props) {
 }
 
 function renderRowData(props, row) {
-  console.log('cat', row.cat.abbrev, INGEST_CAT_ABBREV)
   return [
     dateUtils.format(row.date),
     row.desc,
