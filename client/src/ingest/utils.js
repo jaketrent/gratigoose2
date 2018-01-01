@@ -5,7 +5,7 @@ export const CHOOSABLE_COLUMNS = [
   DATE_COLUMN_FIELD_KEY,
   'desc'
 ]
-export const INGEST_CAT_ABBREV = 'ing' // TODO: verify
+export const INGEST_CAT_ABBREV = 'ingest'
 
 const supportedDateFormat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
 
