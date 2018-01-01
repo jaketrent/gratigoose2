@@ -1,4 +1,9 @@
 // @flow
 export type Expected = {
-  // TODO: later
+  id: number,
+  catId: number,
+  amt: number,
+  year: number,
+  month: number,
+  date: Date
 }
