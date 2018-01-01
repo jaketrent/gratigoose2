@@ -2,12 +2,16 @@ import * as dateUtils from '../common/date'
 import * as objectUtils from '../common/object'
 
 export function hasRequiredFields(trans) {
-  return trans
-      && trans.date && trans.date.length > 0
-      && trans.desc && trans.desc.length > 0
-      && !isNaN(parseFloat(trans.amt))
-      && trans.acct.id
-      && trans.cat.id
+  return (
+    trans &&
+    trans.date &&
+    trans.date.length > 0 &&
+    trans.desc &&
+    trans.desc.length > 0 &&
+    !isNaN(parseFloat(trans.amt)) &&
+    trans.acct.id &&
+    trans.cat.id
+  )
 }
 
 export function combineRelations(transs, { accts, cats }) {
@@ -24,9 +28,7 @@ export function findAll(transs, filter = x => x) {
 
 export function sinceDate(date, trans) {
   date = date
-    ? typeof date === 'string'
-      ? Date.parse(date)
-      : date.getTime() 
+    ? typeof date === 'string' ? Date.parse(date) : date.getTime()
     : dateUtils.MIN
   const transDate = Date.parse(trans.date)
   return transDate > date
@@ -34,8 +36,11 @@ export function sinceDate(date, trans) {
 
 export function sumTranssAmtForCat(catId, transs) {
   return transs.reduce((sum, trans) => {
-    if (trans.cat.id === catId)
-      sum += trans.amt
+    if (trans.cat) {
+      if (trans.cat.id === catId) sum += trans.amt
+    } else {
+      console.log('Transaction missing category', trans)
+    }
     return sum
   }, 0)
 }
