@@ -62,7 +62,22 @@ order by trans_date desc
 }
 
 func FindInYearMonth(db *sql.DB, year int, month int) ([]*Trans, error) {
-	rows, err := db.Query("select id, trans_date, description, amt, created, updated, year, month, day from trans where year = $1 and month = $2 order by trans_date desc", year, month)
+	const query = `
+select id
+, trans_date
+, description
+, amt
+, created
+, updated
+, year
+, month
+, day
+from trans
+where year = $1
+and month = $2
+order by trans_date desc
+`
+	rows, err := db.Query(query, year, month)
 
 	if err != nil {
 		return nil, err
