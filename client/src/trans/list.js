@@ -26,8 +26,8 @@ function renderRowData(props, row) {
     dateUtils.format(row.date),
     row.desc,
     formatUsd(row.amt),
-    row.acct.abbrev,
-    row.cat.abbrev
+    row.acct.name,
+    row.cat.name
   ]
 }
 
