@@ -48,12 +48,16 @@ function destroySuccess(state, action) {
   }
 }
 
-export default createWithHandlers({
-  [TYPES.CREATE_RESET]: createReset,
-  [TYPES.CREATE_SUCCESS]: createSuccess,
-  [TYPES.DESTROY_SUCCESS]: destroySuccess,
-  [TYPES.FIND_ALL_SUCCESS]: findSuccess,
-  [TYPES.FIND_IN_YEAR_SUCCESS]: findSuccess,
-  [TYPES.FIND_IN_YEAR_MONTH_SUCCESS]: findSuccess,
-  [TYPES.UPDATE_SUCCESS]: updateSuccess
-}, initialState)
+export default createWithHandlers(
+  {
+    [TYPES.CREATE_RESET]: createReset,
+    [TYPES.CREATE_SUCCESS]: createSuccess,
+    [TYPES.DESTROY_SUCCESS]: destroySuccess,
+    [TYPES.FIND_ALL_SUCCESS]: findSuccess,
+    [TYPES.FIND_IN_YEAR_SUCCESS]: findSuccess,
+    [TYPES.FIND_IN_YEAR_MONTH_SUCCESS]: findSuccess,
+    [TYPES.FIND_IN_YEAR_MONTH_CAT_SUCCESS]: findSuccess,
+    [TYPES.UPDATE_SUCCESS]: updateSuccess
+  },
+  initialState
+)

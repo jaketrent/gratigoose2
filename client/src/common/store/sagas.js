@@ -15,6 +15,7 @@ import * as transActions from '../../trans/actions'
 import * as transSagas from '../../trans/sagas'
 
 export default function* root() {
+  // prettier-ignore
   yield* [
     fork(takeEvery, acctActions.TYPES.FIND_ALL, acctSagas.findAll),
     fork(takeEvery, acctActions.TYPES.SEARCH, acctSagas.search),
@@ -32,6 +33,7 @@ export default function* root() {
     fork(takeEvery, transActions.TYPES.UPDATE, transSagas.update),
     fork(takeEvery, transActions.TYPES.FIND_ALL, transSagas.findAll),
     fork(takeEvery, transActions.TYPES.FIND_IN_YEAR, transSagas.findInYear),
-    fork(takeEvery, transActions.TYPES.FIND_IN_YEAR_MONTH, transSagas.findInYearMonth)
+    fork(takeEvery, transActions.TYPES.FIND_IN_YEAR_MONTH, transSagas.findInYearMonth),
+    fork(takeEvery, transActions.TYPES.FIND_IN_YEAR_MONTH_CAT, transSagas.findInYearMonthCat)
   ]
 }

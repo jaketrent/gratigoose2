@@ -8,6 +8,7 @@ import ingest from '../../ingest'
 import login from '../../auth/login'
 import transFindInYear from '../../trans/middleware/find-in-year'
 import transFindInYearMonth from '../../trans/middleware/find-in-year-month'
+import transFindInYearMonthCat from '../../trans/middleware/find-in-year-month-cat'
 import * as router from '../router'
 import tithing from '../../tithing'
 import trans from '../../trans'
@@ -31,6 +32,12 @@ export function map(basePath: ?string) {
   router.route('/:year/tithing', isLoggedIn, transFindInYear, tithing)
   router.route('/:year', isLoggedIn, transFindInYear, trans)
   router.route('/:year/:month', isLoggedIn, transFindInYearMonth, trans)
+  router.route(
+    '/:year/:month/cat/:catId',
+    isLoggedIn,
+    transFindInYearMonthCat,
+    trans
+  )
   router.route(
     '/:year/:month/budget',
     isLoggedIn,

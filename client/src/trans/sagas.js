@@ -62,6 +62,21 @@ export function* findInYearMonth({ month, year }) {
   // TODO: impl and error check
 }
 
+export function* findInYearMonthCat({ month, year, catId }) {
+  const { accts, cats } = yield* loadTransRelations()
+  const transs = yield call(request, {
+    accts,
+    api: api.findInYearMonthCat,
+    catId,
+    cats,
+    month,
+    year
+  })
+
+  yield put(actions.findInYearMonthCatSuccess({ catId, month, transs, year }))
+  // TODO: impl and error check
+}
+
 export function* update({ trans }) {
   try {
     const { accts, cats } = yield* loadTransRelations()
