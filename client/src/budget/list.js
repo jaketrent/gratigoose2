@@ -4,6 +4,7 @@ import React from 'react'
 import ExpectedInputForm from './expected-input-form'
 import { formatBudgetLines } from './utils'
 import { formatUsd } from '../common/amt'
+import Link from '../common/components/link'
 import List from '../common/components/list'
 
 function renderEdit(props, row) {
@@ -23,7 +24,9 @@ function renderHeaderData(props) {
 
 function renderRowData(props, row) {
   return [
-    row.cat.name,
+    <Link href={`/${props.year}/${props.month}/cat/${row.cat.id}`}>
+      {row.cat.name}
+    </Link>,
     row.expected ? formatUsd(row.expected.amt) : formatUsd(0),
     formatUsd(row.transsAmtSum),
     formatUsd(row.diff)
