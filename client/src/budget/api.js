@@ -1,8 +1,6 @@
 import axios from 'axios'
 
 import deserializeError from '../common/api/deserialize-error'
-import * as expectedUtils from '../expected/utils'
-import * as transUtils from '../trans/utils'
 
 export const findInYearMonth = {
   formatUrl({ month, year }) {
@@ -14,11 +12,7 @@ export const findInYearMonth = {
     return axios.get(api.formatUrl(args))
   },
   deserializeSuccess(res, args) {
-    return {
-      ...res.data.data,
-      expecteds: expectedUtils.combineRelations(res.data.data.expecteds, args),
-      transs: transUtils.combineRelations(res.data.data.transs, args)
-    }
+    return res.data.data
   },
   deserializeError
 }
@@ -27,12 +21,12 @@ export const createExpected = {
   formatUrl() {
     return `/api/v1/expected`
   },
-  serialize({ amt, cat, month, year }) {
+  serialize(args) {
     return {
-      amt,
-      catId: cat.id,
-      year: parseInt(year, 10),
-      month: parseInt(month, 10)
+      amt: args.amt,
+      catId: args.catId,
+      year: parseInt(args.year, 10),
+      month: parseInt(args.month, 10)
     }
   },
   request(args) {
@@ -40,7 +34,7 @@ export const createExpected = {
     return axios.post(api.formatUrl(), api.serialize(args))
   },
   deserializeSuccess(res, args) {
-    return expectedUtils.combineRelations(res.data.data, args)
+    return res.data.data
   },
   deserializeError
 }
@@ -60,7 +54,7 @@ export const updateExpected = {
     return axios.put(api.formatUrl(args), api.serialize(args))
   },
   deserializeSuccess(res, args) {
-    return expectedUtils.combineRelations(res.data.data, args)
+    return res.data.data
   },
   deserializeError
 }

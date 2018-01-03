@@ -36,11 +36,7 @@ export function sinceDate(date, trans) {
 
 export function sumTranssAmtForCat(catId, transs) {
   return transs.reduce((sum, trans) => {
-    if (trans.cat) {
-      if (trans.cat.id === catId) sum += trans.amt
-    } else {
-      console.log('Transaction missing category', trans)
-    }
+    if (trans.catId === catId) sum += trans.amt
     return sum
   }, 0)
 }

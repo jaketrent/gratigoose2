@@ -48,7 +48,7 @@ class ExpectedInputForm extends React.Component {
 
         if (expected && expected.id)
           this.props.updateExpected({ expected, amt })
-        else this.props.createExpected({ amt, cat, year, month })
+        else this.props.createExpected({ amt, catId: cat.id, year, month })
 
         if (typeof this.props.onSubmit === 'function')
           this.props.onSubmit(evt, expected)

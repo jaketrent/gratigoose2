@@ -67,6 +67,8 @@ select id
 , trans_date
 , description
 , amt
+, acct_id
+, cat_id
 , created
 , updated
 , year
@@ -87,7 +89,7 @@ order by trans_date desc
 	transs := make([]*Trans, 0)
 	for rows.Next() {
 		var trans Trans
-		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Desc, &trans.Amt, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
+		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Desc, &trans.Amt, &trans.AcctId, &trans.CatId, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
 			return nil, err
 		}
 		transs = append(transs, &trans)

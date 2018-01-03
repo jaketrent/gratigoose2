@@ -1,20 +1,34 @@
+// @flow
 import { TYPES } from './actions'
+
+import type {
+  budget$State,
+  budget$CreateExpectedSuccessAction,
+  budget$FindInYearMonthSuccessAction,
+  budget$UpdateExpectedSuccessAction
+} from './types'
 
 import { createWithHandlers } from '../common/reducer'
 
-const initialState = {
+const initialState: budget$State = {
   expecteds: [],
   transs: []
 }
 
-function createExpectedSuccess(state, action) {
+function createExpectedSuccess(
+  state: budget$State,
+  action: budget$CreateExpectedSuccessAction
+): budget$State {
   return {
     ...state,
     expecteds: state.expecteds.concat(action.expecteds)
   }
 }
 
-function updateExpectedSuccess(state, action) {
+function updateExpectedSuccess(
+  state: budget$State,
+  action: budget$UpdateExpectedSuccessAction
+): budget$State {
   const newEx = action.expecteds[0]
   const expecteds = [...state.expecteds]
   const i = expecteds.findIndex(ex => ex.id === newEx.id)
@@ -25,7 +39,10 @@ function updateExpectedSuccess(state, action) {
   }
 }
 
-function findYearMonthSuccess(state, action) {
+function findYearMonthSuccess(
+  state: budget$State,
+  action: budget$FindInYearMonthSuccessAction
+): budget$State {
   return {
     ...state,
     expecteds: action.expecteds,
@@ -33,8 +50,11 @@ function findYearMonthSuccess(state, action) {
   }
 }
 
-export default createWithHandlers({
-  [TYPES.CREATE_EXPECTED_SUCCESS]: createExpectedSuccess,
-  [TYPES.FIND_IN_YEAR_MONTH_SUCCESS]: findYearMonthSuccess,
-  [TYPES.UPDATE_EXPECTED_SUCCESS]: updateExpectedSuccess
-}, initialState)
+export default createWithHandlers(
+  {
+    [TYPES.CREATE_EXPECTED_SUCCESS]: createExpectedSuccess,
+    [TYPES.FIND_IN_YEAR_MONTH_SUCCESS]: findYearMonthSuccess,
+    [TYPES.UPDATE_EXPECTED_SUCCESS]: updateExpectedSuccess
+  },
+  initialState
+)

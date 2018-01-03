@@ -1,7 +1,7 @@
 import * as transUtils from '../trans/utils'
 
 function findExpectedForCat(catId, expecteds) {
-  return expecteds.find(ex => ex.cat.id === catId)
+  return expecteds.find(ex => ex.catId === catId)
 }
 
 export function formatBudgetLines({ cats, expecteds, transs }) {
@@ -21,4 +21,3 @@ export function formatBudgetLines({ cats, expecteds, transs }) {
     }
   })
 }
-

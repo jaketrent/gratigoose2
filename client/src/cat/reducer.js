@@ -2,6 +2,7 @@
 import type { Actions } from '../common/store/types'
 
 import type {
+  Cat,
   cat$SearchSuccessAction,
   cat$FindAllSuccessAction,
   cat$State
@@ -14,14 +15,15 @@ const initialState: cat$State = {
   searchedCats: [],
   catsById: {}
 }
-
+const byName = (a: Cat, b: Cat) =>
+  a.name > b.name ? 1 : b.name > a.name ? -1 : 0
 function searchSuccess(
   state: cat$State,
   action: cat$SearchSuccessAction
 ): cat$State {
   return {
     ...state,
-    searchedCats: action.cats
+    searchedCats: action.cats.sort(byName)
   }
 }
 
@@ -31,7 +33,7 @@ function findAllSuccess(
 ): cat$State {
   return {
     ...state,
-    cats: action.cats,
+    cats: action.cats.sort(byName),
     catsById: action.cats.reduce((acc, cat) => {
       acc[cat.id] = cat
       return acc
