@@ -1,3 +1,8 @@
+// @flow
+import type { Cat } from '../cat/types'
+import type { Expected } from '../expected/types'
+import type { Trans } from '../trans/types'
+
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -6,6 +11,15 @@ import { formatBudgetLines } from './utils'
 import { formatUsd } from '../common/amt'
 import Link from '../common/components/link'
 import List from '../common/components/list'
+
+type Props = {
+  cats: Cat[],
+  expecteds: Expected[],
+  month: ?number,
+  onEditSubmit?: Cat => void,
+  transs: Trans[],
+  year: ?number
+}
 
 function renderEdit(props, row) {
   return (
@@ -33,7 +47,7 @@ function renderRowData(props, row) {
   ]
 }
 
-function BudgetCatList(props) {
+function BudgetCatList(props: Props) {
   return (
     <List
       month={props.month}
@@ -45,14 +59,6 @@ function BudgetCatList(props) {
       year={props.year}
     />
   )
-}
-BudgetCatList.PropTypes = {
-  cats: PropTypes.arrayOf(PropTypes.object).isRequired,
-  expecteds: PropTypes.arrayOf(PropTypes.object).isRequired,
-  month: PropTypes.string.isRequired,
-  onEditSubmit: PropTypes.func,
-  transs: PropTypes.arrayOf(PropTypes.object).isRequired,
-  year: PropTypes.string.isRequired
 }
 
 export default BudgetCatList
