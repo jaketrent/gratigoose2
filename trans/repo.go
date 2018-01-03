@@ -97,6 +97,43 @@ order by trans_date desc
 	return transs, nil
 }
 
+func findInYearMonthCat(db *sql.DB, year int, month int, catId int) ([]*Trans, error) {
+	const query = `
+select id
+, trans_date
+, description
+, amt
+, acct_id
+, cat_id
+, created
+, updated
+, year
+, month
+, day
+from trans
+where year = $1
+and month = $2
+and cat_id = $3
+order by trans_date desc
+`
+	rows, err := db.Query(query, year, month, catId)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	transs := make([]*Trans, 0)
+	for rows.Next() {
+		var trans Trans
+		if err := rows.Scan(&trans.Id, &trans.Date, &trans.Desc, &trans.Amt, &trans.AcctId, &trans.CatId, &trans.Created, &trans.Updated, &trans.Year, &trans.Month, &trans.Day); err != nil {
+			return nil, err
+		}
+		transs = append(transs, &trans)
+	}
+	return transs, nil
+}
+
 func insert(db *sql.DB, trans *Trans) (*Trans, error) {
 	const query = `
 insert into trans

@@ -86,6 +86,43 @@ func yearMonth(c *gin.Context) {
 	}
 }
 
+func yearMonthCat(c *gin.Context) {
+	db, _ := c.MustGet("db").(*sql.DB)
+	year, err := strconv.Atoi(c.Param("year"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "Bad year", Status: http.StatusBadRequest}},
+		})
+		return
+	}
+
+	month, err := strconv.Atoi(c.Param("month"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "Bad month", Status: http.StatusBadRequest}},
+		})
+		return
+	}
+
+	catId, err := strconv.Atoi(c.Param("catId"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "Bad category", Status: http.StatusBadRequest}},
+		})
+		return
+	}
+
+	transs, err := findInYearMonthCat(db, year, month, catId)
+	if err == nil {
+		c.JSON(http.StatusOK, ok{
+			Data: transs,
+		})
+	} else {
+		c.JSON(http.StatusInternalServerError, bad{Errors: []clienterr{{Title: "Server error", Status: http.StatusInternalServerError}}})
+		fmt.Println("trans year month error", err)
+	}
+}
+
 type newtrans struct {
 	Data *Trans `json:"data"`
 }
@@ -184,4 +221,5 @@ func Mount(router *gin.Engine) {
 	router.GET("/api/v1/trans", list)
 	router.GET("/api/v1/trans/year/:year", year)
 	router.GET("/api/v1/trans/year/:year/month/:month", yearMonth)
+	router.GET("/api/v1/trans/year/:year/month/:month/cat/:catId", yearMonthCat)
 }
