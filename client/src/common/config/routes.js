@@ -12,6 +12,7 @@ import transFindInYearMonthCat from '../../trans/middleware/find-in-year-month-c
 import * as router from '../router'
 import tithing from '../../tithing'
 import trans from '../../trans'
+import transCat from '../../trans/cat'
 
 export function map(basePath: ?string) {
   router.route('/', _ => {
@@ -36,7 +37,7 @@ export function map(basePath: ?string) {
     '/:year/:month/cat/:catId',
     isLoggedIn,
     transFindInYearMonthCat,
-    trans
+    transCat
   )
   router.route(
     '/:year/:month/budget',
