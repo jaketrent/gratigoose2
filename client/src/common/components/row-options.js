@@ -11,6 +11,12 @@ function RowOptions(props) {
       <div className={props.css.root}>
         <button
           className={props.css.option}
+          onClick={props.onClick.bind(null, 'edit')}
+        >
+          Edit
+        </button>
+        <button
+          className={props.css.option}
           onClick={props.onClick.bind(null, 'destroy')}
         >
           Destroy

@@ -54,6 +54,8 @@ class Row extends React.Component<Props, State> {
   handleOptionClick: (string, SyntheticEvent<*>) => void
   handleOptionClick(optionName, evt) {
     if (optionName === 'close') this.setState({ isOptioning: false })
+    else if (optionName === 'edit')
+      this.setState({ isOptioning: false, isEditing: true })
 
     if (typeof this.props.onOptionClick === 'function')
       this.props.onOptionClick(optionName, this.props.row)
