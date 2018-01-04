@@ -1,3 +1,4 @@
+// @flow
 import FocusTrap from 'focus-trap-react'
 import MediaQuery from 'react-responsive'
 import PropTypes from 'prop-types'
@@ -13,12 +14,31 @@ const MOUSE_DOWN_TIME_ELAPSED_TRIGGER = 500
 
 let mouseDownTimeStart = 0
 
-class Row extends React.Component {
+type RowType = {}
+type Props = {
+  css: Object,
+  onEditSubmit: Function, // TODO: more specific?
+  onOptionClick: Function, // TODO: more specific?
+  renderData: Function, // TODO: more specific?
+  renderEdit: Function, // TODO: more specific?
+  renderHeaderData: Function, // TODO: more specific?
+  renderRowData: Function, // TODO: more specific?
+  row: RowType
+}
+type State = {
+  isEditing: boolean,
+  isOptioning: boolean
+}
+
+class Row extends React.Component<Props, State> {
+  mouseDownTimer: number
+  readRow: ?HTMLDivElement
   constructor() {
     super()
     this.state = {
       // activeTrap: false,
-      isEditing: false
+      isEditing: false,
+      isOptioning: false
     }
     this.handleOptionClick = this.handleOptionClick.bind(this)
     this.handleReadKeyUp = this.handleReadKeyUp.bind(this)
@@ -30,18 +50,15 @@ class Row extends React.Component {
   componentWillUnmount() {
     clearTimeout(this.mouseDownTimer)
   }
-  // mountTrap() {
-  //   this.setState({ activeTrap: true })
-  // }
-  // unmountTrap() {
-  //   this.setState({ activeTrap: false })
-  // }
+  // TODO: enum the string type
+  handleOptionClick: (string, SyntheticEvent<*>) => void
   handleOptionClick(optionName, evt) {
     if (optionName === 'close') this.setState({ isOptioning: false })
 
     if (typeof this.props.onOptionClick === 'function')
       this.props.onOptionClick(optionName, this.props.row)
   }
+  handleReadModeMouseDown: void => void
   handleReadModeMouseDown() {
     if (this.state.isOptioning) return
 
@@ -52,6 +69,7 @@ class Row extends React.Component {
       })
     }, MOUSE_DOWN_TIME_ELAPSED_TRIGGER)
   }
+  handleReadModeMouseUp: void => void
   handleReadModeMouseUp() {
     if (this.state.isOptioning) return
 
@@ -63,14 +81,16 @@ class Row extends React.Component {
       this.setState({ isEditing: true })
     }
   }
+  handleReadKeyUp: (SyntheticEvent<*>) => void
   handleReadKeyUp(evt) {
     if (this.state.isOptioning) return
 
     if (evt.which === keyCodes.ENTER) this.setState({ isEditing: true })
   }
+  handleWriteModeSubmit: void => void
   handleWriteModeSubmit() {
     this.setState({ isEditing: false }, _ => {
-      this.readRow.focus()
+      if (this.readRow) this.readRow.focus()
     })
 
     if (typeof this.props.onEditSubmit === 'function')
@@ -80,8 +100,7 @@ class Row extends React.Component {
     return (
       <FocusTrap
         focusTrapOptions={{
-          escapeDeactivates: false,
-          onDeactivate: this.unmountTrap
+          escapeDeactivates: false
         }}
       >
         <div className={this.props.css.rowWrite}>
@@ -95,6 +114,8 @@ class Row extends React.Component {
       </FocusTrap>
     )
   }
+  // TODO: more specific?
+  renderReadCol: (any, number) => void
   renderReadCol(data, i) {
     return i > 2 ? (
       <MediaQuery key={i} query={media.smallWidth}>
@@ -136,12 +157,12 @@ class Row extends React.Component {
   }
 }
 
-Row.PropTypes = {
-  onOptionClick: PropTypes.func,
-  renderEdit: PropTypes.func.isRequired,
-  renderData: PropTypes.func.isRequired,
-  row: PropTypes.object
-}
+// Row.PropTypes = {
+//   onOptionClick: PropTypes.func,
+//   renderEdit: PropTypes.func.isRequired,
+//   renderData: PropTypes.func.isRequired,
+//   row: PropTypes.object
+// }
 
 function hasRows(props) {
   return Array.isArray(props.rows) && props.rows.length > 0
