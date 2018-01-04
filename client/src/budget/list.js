@@ -38,7 +38,10 @@ function renderHeaderData(props) {
 
 function renderRowData(props, row) {
   return [
-    <Link href={`/${props.year}/${props.month}/cat/${row.cat.id}`}>
+    <Link
+      href={`/${props.year}/${props.month}/cat/${row.cat.id}`}
+      tabIndex="-1"
+    >
       {row.cat.name}
     </Link>,
     row.expected ? formatUsd(row.expected.amt) : formatUsd(0),

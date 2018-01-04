@@ -8,12 +8,13 @@ import * as urlUtil from '../url'
 
 class Link extends React.Component {
   render() {
-    const { href, basePath, ...props } = this.props
+    const { href, basePath, tabIndex, ...props } = this.props
     return (
       <a
         className={props.css.isActive ? props.css.rootActive : props.css.root}
         href={urlUtil.formatUrl(href, basePath)}
         ref="link"
+        tabIndex={tabIndex}
       >
         {this.props.children}
       </a>
