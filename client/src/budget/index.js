@@ -35,7 +35,11 @@ function mapStateToProps(state: State): Props {
 function Budget(props: Props) {
   return (
     <Chrome title={<Title>Budget</Title>}>
-      <Summary expecteds={props.expecteds} transs={props.transs} />
+      <Summary
+        cats={props.cats}
+        expecteds={props.expecteds}
+        transs={props.transs}
+      />
       <List
         cats={props.cats}
         expecteds={props.expecteds}

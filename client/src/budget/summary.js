@@ -1,9 +1,14 @@
+// @flow
+import type { Cat, CatType } from '../cat/types'
+import type { Expected } from '../expected/types'
+import type { Trans } from '../trans/types'
+
 import PropTypes from 'prop-types'
 import React from 'react'
 import styleable from 'react-styleable'
 
-import catTypes from '../cat/types'
 import css from './summary.module.css'
+import { catTypesMap } from '../cat/types'
 import Diff from './diff'
 import { formatUsd } from '../common/amt'
 import Net0 from './net-0'
@@ -19,35 +24,45 @@ function Row(props) {
   )
 }
 
+type Props = {
+  cats: Cat[],
+  css: Object,
+  expecteds: Expected[],
+  transs: Trans[]
+}
+
 Row.PropTypes = {
   label: PropTypes.string,
   amt: PropTypes.number
 }
 
-function Summary(props) {
+const catType = (cats: Cat[], catId): ?CatType =>
+  (cats.find(cat => cat.id === catId) || {}).type
+
+function Summary(props: Props) {
   const expectedIncome = props.expecteds
     .filter(e => e.amt > 0)
-    .filter(e => e.cat && e.cat.type !== catTypes.savings)
+    .filter(e => catType(props.cats, e.catId) !== catTypesMap.savings)
     .reduce((sum, e) => sum + e.amt, 0)
   const expectedDebits = props.expecteds
     .filter(e => e.amt <= 0)
-    .filter(e => e.cat && e.cat.type !== catTypes.savings)
+    .filter(e => catType(props.cats, e.catId) !== catTypesMap.savings)
     .reduce((sum, e) => sum + e.amt, 0)
   const expectedSavings = props.expecteds
-    .filter(e => e.cat && e.cat.type === catTypes.savings)
+    .filter(e => catType(props.cats, e.catId) === catTypesMap.savings)
     .reduce((sum, e) => sum + e.amt, 0)
   const expectedNet = expectedIncome + expectedDebits - expectedSavings
 
   const transIncome = props.transs
     .filter(e => e.amt > 0)
-    .filter(e => e.cat && e.cat.type !== catTypes.savings)
+    .filter(e => catType(props.cats, e.catId) !== catTypesMap.savings)
     .reduce((sum, e) => sum + e.amt, 0)
   const transDebits = props.transs
     .filter(e => e.amt <= 0)
-    .filter(e => e.cat && e.cat.type !== catTypes.savings)
+    .filter(e => catType(props.cats, e.catId) !== catTypesMap.savings)
     .reduce((sum, e) => sum + e.amt, 0)
   const transSavings = props.transs
-    .filter(e => e.cat && e.cat.type === catTypes.savings)
+    .filter(e => catType(props.cats, e.catId) === catTypesMap.savings)
     .reduce((sum, e) => sum + e.amt, 0)
   // const transNet = transIncome + transDebits - transSavings
 

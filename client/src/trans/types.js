@@ -1,6 +1,8 @@
 // @flow
 export type Trans = {
   // TODO: later
+  amt: number,
+  catId: number
 }
 export type trans$FindInYearAction = {
   type: 'trans/FIND_IN_YEAR',

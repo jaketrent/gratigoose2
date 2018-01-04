@@ -1,8 +1,22 @@
 // @flow
+
+const catTypes = {
+  debit: 'debit',
+  credit: 'credit',
+  savings: 'savings',
+  both: 'both'
+}
+
+// export type CatType = 'debit' | 'credit' | 'savings' | 'both'
+export type CatType = $Keys<typeof catTypes>
+
+export const catTypesMap: { [key: CatType]: ?CatType } = catTypes
+
 export type Cat = {
   id: number,
   name: string,
-  abbrev: string
+  abbrev: string,
+  type: CatType
 }
 
 export type cat$State = {
@@ -26,10 +40,3 @@ export type cat$Actions =
   | cat$FindAllAction
   | cat$FindAllSuccessAction
   | cat$SearchSuccessAction
-
-export default {
-  debit: 'debit',
-  credit: 'credit',
-  savings: 'savings',
-  both: 'both'
-}
