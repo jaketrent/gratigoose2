@@ -1,0 +1,12 @@
+.cols {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+.colsFixed {
+  composes: cols;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}

@@ -1,20 +1,13 @@
-@import "../common/styles/fonts.css";
+@import '../common/styles/fonts.css';
 
 .root {
-  display: flex;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
 }
-.part {
-  flex: 1;
-}
-.label {
+.root > div:nth-child(2n + 1) {
   font-family: var(--fontSpecial);
-  margin-bottom: 5px;
-}
-.value {
-  
 }
 .valueNet {
-  composes: value;
   font-weight: 600;
 }

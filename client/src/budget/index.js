@@ -5,8 +5,10 @@ import type { State } from '../common/store/types'
 import type { Trans } from '../trans/types'
 
 import { connect } from 'react-redux'
+import styleable from 'react-styleable'
 import React from 'react'
 
+import css from './index.module.css'
 import Chrome from '../common/layouts/chrome'
 import List from './list'
 import renderWithState from '../common/store/render'
@@ -32,20 +34,39 @@ function mapStateToProps(state: State): Props {
   }
 }
 
+const Cols = styleable(css)(props => {
+  return (
+    <div className={props.css.cols}>
+      {props.left}
+      {props.right}
+    </div>
+  )
+})
+
 function Budget(props: Props) {
   return (
     <Chrome title={<Title>Budget</Title>}>
-      <Summary
-        cats={props.cats}
-        expecteds={props.expecteds}
-        transs={props.transs}
+      <Cols
+        left={
+          <List
+            cats={props.cats}
+            expecteds={props.expecteds}
+            month={props.month}
+            transs={props.transs}
+            year={props.year}
+          />
+        }
       />
-      <List
-        cats={props.cats}
-        expecteds={props.expecteds}
-        month={props.month}
-        transs={props.transs}
-        year={props.year}
+      <Cols
+        css={{ cols: css.colsFixed }}
+        left={<div />}
+        right={
+          <Summary
+            cats={props.cats}
+            expecteds={props.expecteds}
+            transs={props.transs}
+          />
+        }
       />
     </Chrome>
   )

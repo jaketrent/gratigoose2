@@ -8,28 +8,20 @@ import { formatUsd } from '../common/amt'
 function Net0(props) {
   return (
     <div className={props.css.root}>
-      <div className={props.css.part}>
-        <div className={props.css.label}>Income</div>
-        <div className={props.css.value}>{formatUsd(props.income)}</div>
+      <div>Income</div>
+      <div>{formatUsd(props.income)}</div>
+      <div>Debits</div>
+      <div>
+        {props.debits > 0 ? '+' : ''}
+        {formatUsd(props.debits)}
       </div>
-      <div className={props.css.part}>
-        <div className={props.css.label}>Debits</div>
-        <div className={props.css.value}>
-          {props.debits > 0 ? '+' : ''}
-          {formatUsd(props.debits)}
-        </div>
+      <div>Savings</div>
+      <div>
+        {props.savings > 0 ? '+' : ''}
+        {formatUsd(props.savings)}
       </div>
-      <div className={props.css.part}>
-        <div className={props.css.label}>Savings</div>
-        <div className={props.css.value}>
-          {props.savings > 0 ? '+' : ''}
-          {formatUsd(props.savings)}
-        </div>
-      </div>
-      <div className={props.css.part}>
-        <div className={props.css.label}>&nbsp;</div>
-        <div className={props.css.valueNet}>= {formatUsd(props.net)}</div>
-      </div>
+      <div />
+      <div className={props.css.valueNet}>= {formatUsd(props.net)}</div>
     </div>
   )
 }
