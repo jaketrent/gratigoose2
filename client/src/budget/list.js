@@ -33,7 +33,7 @@ function renderEdit(props, row) {
 }
 
 function renderHeaderData(props) {
-  return ['Category', 'Expected', 'Actual', 'Difference']
+  return ['Category', 'Expected', 'Actual']
 }
 
 function renderRowData(props, row) {
@@ -45,8 +45,7 @@ function renderRowData(props, row) {
       {row.cat.name}
     </Link>,
     row.expected ? formatUsd(row.expected.amt) : formatUsd(0),
-    formatUsd(row.transsAmtSum),
-    formatUsd(row.diff)
+    formatUsd(row.transsAmtSum)
   ]
 }
 

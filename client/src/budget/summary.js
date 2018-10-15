@@ -3,24 +3,14 @@ import type { Cat, CatType } from '../cat/types'
 import type { Expected } from '../expected/types'
 import type { Trans } from '../trans/types'
 
-import PropTypes from 'prop-types'
 import React from 'react'
 import styleable from 'react-styleable'
 
 import css from './summary.module.css'
 import { catTypesMap } from '../cat/types'
 import { formatUsd } from '../common/amt'
-import Net0 from './net-0'
+import AmtTable from './amt-table'
 import SectionTitle from '../common/components/section-title'
-
-function Row(props) {
-  return (
-    <tr className={props.css.row}>
-      <td className={props.css.cell}>{props.label}</td>
-      <td className={props.css.cell}>{formatUsd(props.amt)}</td>
-    </tr>
-  )
-}
 
 type Props = {
   cats: Cat[],
@@ -29,56 +19,91 @@ type Props = {
   transs: Trans[]
 }
 
-Row.PropTypes = {
-  label: PropTypes.string,
-  amt: PropTypes.number
-}
+const findCat = (cats: Cat[], catId): ?Cat => cats.find(cat => cat.id === catId)
 
 const catType = (cats: Cat[], catId): ?CatType =>
-  (cats.find(cat => cat.id === catId) || {}).type
+  (findCat(cats, catId) || {}).type
+
+const catName = (cats: Cat[], catId): ?string =>
+  (findCat(cats, catId) || {}).name
 
 function Summary(props: Props) {
   const expectedIncome = props.expecteds
     .filter(e => e.amt > 0)
     .filter(e => catType(props.cats, e.catId) !== catTypesMap.savings)
-    .reduce((sum, e) => sum + e.amt, 0)
+  const expectedIncomeSum = expectedIncome.reduce((sum, e) => sum + e.amt, 0)
   const expectedDebits = props.expecteds
     .filter(e => e.amt <= 0)
     .filter(e => catType(props.cats, e.catId) !== catTypesMap.savings)
-    .reduce((sum, e) => sum + e.amt, 0)
-  const expectedSavings = props.expecteds
-    .filter(e => catType(props.cats, e.catId) === catTypesMap.savings)
-    .reduce((sum, e) => sum + e.amt, 0)
-  const expectedNet = expectedIncome + expectedDebits - expectedSavings
+  const expectedDebitSum = expectedDebits.reduce((sum, e) => sum + e.amt, 0)
+  const expectedSavings = props.expecteds.filter(
+    e => catType(props.cats, e.catId) === catTypesMap.savings
+  )
+  const expectedSavingSum = expectedSavings.reduce((sum, e) => sum + e.amt, 0)
+  const expectedNetSum =
+    expectedIncomeSum + expectedDebitSum - expectedSavingSum
 
   const transIncome = props.transs
     .filter(e => e.amt > 0)
     .filter(e => catType(props.cats, e.catId) !== catTypesMap.savings)
-    .reduce((sum, e) => sum + e.amt, 0)
+  const incomeSum = transIncome.reduce((sum, e) => sum + e.amt, 0)
+
   const transDebits = props.transs
     .filter(e => e.amt <= 0)
     .filter(e => catType(props.cats, e.catId) !== catTypesMap.savings)
-    .reduce((sum, e) => sum + e.amt, 0)
-  const transSavings = props.transs
-    .filter(e => catType(props.cats, e.catId) === catTypesMap.savings)
-    .reduce((sum, e) => sum + e.amt, 0)
-  // const transNet = transIncome + transDebits - transSavings
+  const debitSum = transDebits.reduce((sum, e) => sum + e.amt, 0)
 
-  // TODO: include nets in some sort of balance viz
+  const transSavings = props.transs.filter(
+    e => catType(props.cats, e.catId) === catTypesMap.savings
+  )
+  const savingSum = transSavings.reduce((sum, e) => sum + e.amt, 0)
+
+  const byAmt = (a, b) => a.amt - b.amt
+
   return (
     <div className={props.css.root}>
-      <Net0
-        income={expectedIncome}
-        debits={expectedDebits}
-        savings={expectedSavings}
-        net={expectedNet}
-      />
+      <SectionTitle>Plan</SectionTitle>
+      <AmtTable>
+        <div>Income</div>
+        <div>{formatUsd(expectedIncomeSum)}</div>
+        <div>Debits</div>
+        <div>{formatUsd(expectedDebitSum)}</div>
+        <div>Savings</div>
+        <div>{formatUsd(expectedSavingSum)}</div>
+        <div className={props.css.sum}>Net</div>
+        <div className={props.css.sum}>{formatUsd(expectedNetSum)}</div>
+      </AmtTable>
+      <SectionTitle>Income</SectionTitle>
+      <AmtTable>
+        {expectedIncome
+          .sort(byAmt)
+          .map(e => [
+            <div>{catName(props.cats, e.catId)}</div>,
+            <div>{formatUsd(e.amt)}</div>
+          ])}
+      </AmtTable>
+      <SectionTitle>Debit</SectionTitle>
+      <AmtTable>
+        {expectedDebits
+          .sort(byAmt)
+          .slice(0, 10)
+          .map(e => [
+            <div>{catName(props.cats, e.catId)}</div>,
+            <div>{formatUsd(e.amt)}</div>
+          ])}
+      </AmtTable>
+      <SectionTitle>Savings</SectionTitle>
+      <AmtTable>
+        {expectedSavings
+          .sort(byAmt)
+          .slice(0, 10)
+          .map(e => [
+            <div>{catName(props.cats, e.catId)}</div>,
+            <div>{formatUsd(e.amt)}</div>
+          ])}
+      </AmtTable>
     </div>
   )
-}
-Summary.PropTypes = {
-  expecteds: PropTypes.arrayOf(PropTypes.object),
-  transs: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default styleable(css)(Summary)

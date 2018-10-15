@@ -8,6 +8,3 @@
 .root > div:nth-child(2n + 1) {
   font-family: var(--fontSpecial);
 }
-.valueNet {
-  font-weight: 600;
-}
