@@ -12,7 +12,6 @@ import css from './index.module.css'
 import Chrome from '../common/layouts/chrome'
 import List from './list'
 import renderWithState from '../common/store/render'
-import SectionTitle from '../common/components/section-title'
 import Summary from './summary'
 import Title from '../common/components/title'
 
