@@ -58,7 +58,8 @@ function Summary(props: Props) {
   )
   const savingSum = transSavings.reduce((sum, e) => sum + e.amt, 0)
 
-  const byAmt = (a, b) => a.amt - b.amt
+  const smallestToLargest = (a, b) => a.amt - b.amt
+  const largestToSmallest = (a, b) => b.amt - a.amt
 
   return (
     <div className={props.css.root}>
@@ -76,7 +77,7 @@ function Summary(props: Props) {
       <SectionTitle>Income</SectionTitle>
       <AmtTable>
         {expectedIncome
-          .sort(byAmt)
+          .sort(largestToSmallest)
           .map(e => [
             <div>{catName(props.cats, e.catId)}</div>,
             <div>{formatUsd(e.amt)}</div>
@@ -85,7 +86,7 @@ function Summary(props: Props) {
       <SectionTitle>Debit</SectionTitle>
       <AmtTable>
         {expectedDebits
-          .sort(byAmt)
+          .sort(smallestToLargest)
           .slice(0, 10)
           .map(e => [
             <div>{catName(props.cats, e.catId)}</div>,
@@ -95,7 +96,7 @@ function Summary(props: Props) {
       <SectionTitle>Savings</SectionTitle>
       <AmtTable>
         {expectedSavings
-          .sort(byAmt)
+          .sort(largestToSmallest)
           .slice(0, 10)
           .map(e => [
             <div>{catName(props.cats, e.catId)}</div>,
