@@ -20,9 +20,13 @@ import Title from '../common/components/title'
 import * as utils from './utils'
 
 function formatRows(contents: string): string[][] {
+  // NOTE: this is brittle atm, because now it assumes csv has quoted values.  Previously it assumed the opposite
+  const splitRow = row => row.split(/","/)
+  const rmCellQuotes = row => row.map(str => str.replace(/"/g, ''))
   return contents
     .split('\n')
-    .map(row => row.split(','))
+    .map(splitRow)
+    .map(rmCellQuotes)
     .filter(row => row.filter(cell => cell).length > 1)
 }
 
@@ -91,54 +95,54 @@ class Ingest extends React.Component<Props, IngestState> {
     this.setState({ file })
   }
   handleAlignSubmit: (SyntheticEvent<*>, any[], boolean) => void // TODO: specify any
-  handleAlignSubmit(evt, columns, includesHeader = true) {
-    this.setState({ columns }, _ => {
-      this.props.upload({
-        acct: this.state.acct,
-        cat: this.props.cats.find(c => c.abbrev === utils.INGEST_CAT_ABBREV),
-        columns: this.state.columns,
-        rows: includesHeader ? this.state.rows.slice(1) : this.state.rows
-      })
-
-      router.redirect('/')
+    handleAlignSubmit(evt, columns, includesHeader = true) {
+  this.setState({ columns }, _ => {
+    this.props.upload({
+      acct: this.state.acct,
+      cat: this.props.cats.find(c => c.abbrev === utils.INGEST_CAT_ABBREV),
+      columns: this.state.columns,
+      rows: includesHeader ? this.state.rows.slice(1) : this.state.rows
     })
-  }
-  renderAcctInput() {
-    return this.props.accts.length > 0 && !this.state.acct ? (
-      <div>
-        <SectionTitle>Select source account</SectionTitle>
-        <AcctInput accts={this.props.accts} onSelect={this.handleAcctSelect} />
-      </div>
-    ) : null
-  }
-  renderFileInput() {
-    return this.state.acct && this.state.rows.length === 0 ? (
-      <div>
-        <SectionTitle>Find transactions CSV</SectionTitle>
-        <CsvInput
-          onLoad={this.handleFileLoad}
-          onSelect={this.handleFileSelect}
-        />
-      </div>
-    ) : null
-  }
-  renderTable() {
-    return this.state.rows.length > 0 && this.state.columns.length === 0 ? (
-      <div>
-        <SectionTitle>Identify transaction fields</SectionTitle>
-        <CsvAligner onSubmit={this.handleAlignSubmit} rows={this.state.rows} />
-      </div>
-    ) : null
-  }
-  render() {
-    return (
-      <Chrome loadTransMeta={false} title={<Title>Ingest</Title>}>
-        {this.renderAcctInput()}
-        {this.renderFileInput()}
-        {this.renderTable()}
-      </Chrome>
-    )
-  }
+
+    router.redirect('/')
+  })
+}
+renderAcctInput() {
+  return this.props.accts.length > 0 && !this.state.acct ? (
+    <div>
+      <SectionTitle>Select source account</SectionTitle>
+      <AcctInput accts={this.props.accts} onSelect={this.handleAcctSelect} />
+    </div>
+  ) : null
+}
+renderFileInput() {
+  return this.state.acct && this.state.rows.length === 0 ? (
+    <div>
+      <SectionTitle>Find transactions CSV</SectionTitle>
+      <CsvInput
+        onLoad={this.handleFileLoad}
+        onSelect={this.handleFileSelect}
+      />
+    </div>
+  ) : null
+}
+renderTable() {
+  return this.state.rows.length > 0 && this.state.columns.length === 0 ? (
+    <div>
+      <SectionTitle>Identify transaction fields</SectionTitle>
+      <CsvAligner onSubmit={this.handleAlignSubmit} rows={this.state.rows} />
+    </div>
+  ) : null
+}
+render() {
+  return (
+    <Chrome loadTransMeta={false} title={<Title>Ingest</Title>}>
+      {this.renderAcctInput()}
+      {this.renderFileInput()}
+      {this.renderTable()}
+    </Chrome>
+  )
+}
 }
 
 const ConnectedIngest = connect(mapStateToProps, mapDispatchToProps)(Ingest)

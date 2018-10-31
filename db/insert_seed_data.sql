@@ -7,5 +7,6 @@ values ('Checking', 'mach')
 -- cat
 insert into cat
 (name, abbrev, type)
-values ('Work', 'wk', 'credit')
+values ('Ingested', 'ing', 'both')
+, ('Work', 'wk', 'credit')
 , ('Groceries', 'gro', 'debit');
