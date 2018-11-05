@@ -11,3 +11,16 @@
   width: 100%;
   pointer-events: none;
 }
+.months {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 0.5em;
+  padding-left: 2em;
+  font-size: 0.5em;
+}
+.months a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}

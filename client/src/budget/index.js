@@ -42,9 +42,54 @@ const Cols = styleable(css)(props => {
   )
 })
 
+const months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+]
+const Months = styleable(css)(props => {
+  const month = parseInt(props.month, 10)
+  const year = parseInt(props.year, 10)
+  return (
+    <div className={props.css.months}>
+      <a
+        href={`/${month === 1 ? year - 1 : year}/${
+          month === 1 ? 12 : month - 1
+        }/budget`}
+      >
+        ◀
+      </a>
+      <a href={`/${year}/${month}/budget`}>{months[month - 1]}</a>
+      <a
+        href={`/${month === 12 ? year + 1 : year}/${
+          month === 12 ? 1 : month + 1
+        }/budget`}
+      >
+        ▶
+      </a>
+    </div>
+  )
+})
+
 function Budget(props: Props) {
   return (
-    <Chrome title={<Title>Budget</Title>}>
+    <Chrome
+      title={
+        <Title>
+          Budget
+          <Months month={props.month} year={props.year} />
+        </Title>
+      }
+    >
       <Cols
         left={
           <List
