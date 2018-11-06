@@ -92,6 +92,23 @@ const Months = styleable(css)(props => {
   )
 })
 
+const isThePast = (year, month) => {
+  year = parseInt(year, 10)
+  month = parseInt(month, 10)
+  const now = new Date()
+  const isPastYear = year < now.getFullYear()
+  const isPastMonthCurrentYear =
+    year === now.getFullYear() && month < now.getMonth() + 1
+  return isPastYear || isPastMonthCurrentYear
+}
+
+const HistoricalMarker = styleable(css)(
+  props =>
+    isThePast(props.year, props.month) ? (
+      <div className={props.css.historical}>(Historical)</div>
+    ) : null
+)
+
 function handleReuseLastBudget(props, evt) {
   evt.preventDefault()
   props.reuseLastBudget({ month: props.month, year: props.year })
@@ -119,6 +136,7 @@ function Budget(props: Props) {
         }
         right={
           <div className={props.css.aside}>
+            <HistoricalMarker year={props.year} month={props.month} />
             {props.expecteds.length === 0 && (
               <button onClick={evt => handleReuseLastBudget(props, evt)}>
                 Reuse last budget

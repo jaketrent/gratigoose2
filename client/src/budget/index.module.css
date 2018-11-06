@@ -17,5 +17,19 @@
   color: inherit;
 }
 .aside {
-  padding-top: 4em;
+  position: fixed;
+  top: 64px;
+  right: 0;
+  padding-right: 2em;
+  width: 33vw;
+}
+.historical {
+  font-size: 3em;
+  letter-spacing: 0.125em;
+  font-style: italic;
+  border: 3px solid var(--colorAccent);
+  color: var(--colorAccentDark);
+  text-align: center;
+  padding: 0.25em 1em;
+  margin-bottom: 12px;
 }

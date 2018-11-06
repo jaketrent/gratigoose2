@@ -1,22 +1,21 @@
 :root {
-  deprecated
-  --colorBrandPrimaryLighter: #A9B8D9;
-  --colorBrandPrimaryLight: #5E739F;
-  --colorBrandPrimary: #2F4574;
+  --colorBrandPrimaryLighter: #a9b8d9;
+  --colorBrandPrimaryLight: #5e739f;
+  --colorBrandPrimary: #2f4574;
   --colorBrandPrimaryDark: #102249;
-  --colorBrandPrimaryDarker: #020B1D;
+  --colorBrandPrimaryDarker: #020b1d;
 
-  --colorBrandSecondaryLighter: #B1AEDC;
-  --colorBrandSecondaryLight: #6965A6;
+  --colorBrandSecondaryLighter: #b1aedc;
+  --colorBrandSecondaryLight: #6965a6;
   --colorBrandSecondary: #383579;
-  --colorBrandSecondaryDark: #17134C;
-  --colorBrandSecondaryDarker: #05031E;
+  --colorBrandSecondaryDark: #17134c;
+  --colorBrandSecondaryDarker: #05031e;
 
-  --colorBrandTertiaryLighter: #A4C4D5;
+  --colorBrandTertiaryLighter: #a4c4d5;
   --colorBrandTertiaryLight: #568197;
-  --colorBrandTertiary: #29566E;
-  --colorBrandTertiaryDark: #0C3145;
-  --colorBrandTertiaryDarker: #01121B;
+  --colorBrandTertiary: #29566e;
+  --colorBrandTertiaryDark: #0c3145;
+  --colorBrandTertiaryDarker: #01121b;
 
   --colorBrandHighlightLight: #f2f059;
   --colorBrandHighlight: #dbd950;
@@ -31,18 +30,17 @@
 
   --colorBland: grey;
 
-
   --colorPrimary: #fff;
   --colorSecondary: #000;
   --colorSecondaryLight: #ababab;
   --colorSecondaryLighter: #dddddd;
   --colorSecondaryLightest: #efefef;
   --colorSecondaryInvert: #fff;
-  
-  --colorAccentDark: #00962F;
-  --colorAccent: #00CA40;
-  --colorAccentLight: #06FF55;
-  --colorAccentLighter: #A7FFC3;
+
+  --colorAccentDark: #00962f;
+  --colorAccent: #00ca40;
+  --colorAccentLight: #06ff55;
+  --colorAccentLighter: #a7ffc3;
   --colorAccentInvert: #fff;
 
   --colorText: #000;
