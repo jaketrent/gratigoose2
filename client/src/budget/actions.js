@@ -8,6 +8,7 @@ export const TYPES = types('budget', [
   'CREATE_EXPECTED_ERROR',
   'FIND_IN_YEAR_MONTH',
   'FIND_IN_YEAR_MONTH_SUCCESS',
+  'REUSE_LAST_BUDGET',
   'UPDATE_EXPECTED',
   'UPDATE_EXPECTED_SUCCESS',
   'UPDATE_EXPECTED_ERROR'
@@ -56,6 +57,14 @@ export function findInYearMonthSuccess({
     expecteds,
     month,
     transs,
+    year
+  }
+}
+
+export function reuseLastBudget({ month, year }) {
+  return {
+    type: TYPES.REUSE_LAST_BUDGET,
+    month,
     year
   }
 }

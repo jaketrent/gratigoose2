@@ -76,3 +76,47 @@ and month = $2
 	}
 	return expecteds, nil
 }
+
+func CopyFrom(db *sql.DB, fromYear int, fromMonth int, toYear int, toMonth int) ([]*Expected, error) {
+	const query = `
+insert into expected
+( cat_id
+, amt
+, year
+, month
+, date
+) select cat_id
+, amt
+, $3
+, $4
+, $5
+from expected
+where year = $1
+and month = $2
+returning id
+, cat_id
+, amt
+, year
+, month
+, date
+, created
+, updated
+`
+	toDate := time.Date(toYear, time.Month(toMonth), 1, 0, 0, 0, 0, time.UTC)
+	rows, err := db.Query(query, fromYear, fromMonth, toYear, toMonth, toDate)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	expecteds := make([]*Expected, 0)
+	for rows.Next() {
+		var expected Expected
+		if err := rows.Scan(&expected.Id, &expected.CatId, &expected.Amt, &expected.Year, &expected.Month, &expected.Date, &expected.Created, &expected.Updated); err != nil {
+			return nil, err
+		}
+		expecteds = append(expecteds, &expected)
+	}
+	return expecteds, nil
+}

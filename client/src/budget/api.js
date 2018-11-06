@@ -39,6 +39,20 @@ export const createExpected = {
   deserializeError
 }
 
+export const reuseLastBudget = {
+  formatUrl({ month, year }) {
+    return `/api/v1/budget/year/${year}/month/${month}/reuse`
+  },
+  request(args) {
+    const { api } = args
+    return axios.post(api.formatUrl(args))
+  },
+  deserializeSuccess(res, args) {
+    return res.data.data.expecteds
+  },
+  deserializeError
+}
+
 export const updateExpected = {
   formatUrl({ expected }) {
     return `/api/v1/expected/${expected.id}`

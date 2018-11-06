@@ -3,14 +3,6 @@
   grid-template-columns: 2fr 1fr;
   gap: 16px;
 }
-.colsFixed {
-  composes: cols;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  pointer-events: none;
-}
 .months {
   display: grid;
   grid-template-columns: auto auto auto;
@@ -23,4 +15,7 @@
   align-items: center;
   text-decoration: none;
   color: inherit;
+}
+.aside {
+  padding-top: 4em;
 }

@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import styleable from 'react-styleable'
 import React from 'react'
 
+import * as actions from './actions'
 import css from './index.module.css'
 import Chrome from '../common/layouts/chrome'
 import List from './list'
@@ -30,6 +31,17 @@ function mapStateToProps(state: State): Props {
     month: state.routing.params.month,
     transs: state.budget.transs,
     year: state.routing.params.year
+  }
+}
+
+type DispatchProps = {
+  reuseLastBudget: ({ month: number, year: number }) => void
+}
+function mapDispatchToProps(dispatch): DispatchProps {
+  return {
+    reuseLastBudget({ month, year }) {
+      dispatch(actions.reuseLastBudget({ month, year }))
+    }
   }
 }
 
@@ -80,6 +92,11 @@ const Months = styleable(css)(props => {
   )
 })
 
+function handleReuseLastBudget(props, evt) {
+  evt.preventDefault()
+  props.reuseLastBudget({ month: props.month, year: props.year })
+}
+
 function Budget(props: Props) {
   return (
     <Chrome
@@ -100,16 +117,19 @@ function Budget(props: Props) {
             year={props.year}
           />
         }
-      />
-      <Cols
-        css={{ cols: css.colsFixed }}
-        left={<div />}
         right={
-          <Summary
-            cats={props.cats}
-            expecteds={props.expecteds}
-            transs={props.transs}
-          />
+          <div className={props.css.aside}>
+            {props.expecteds.length === 0 && (
+              <button onClick={evt => handleReuseLastBudget(props, evt)}>
+                Reuse last budget
+              </button>
+            )}
+            <Summary
+              cats={props.cats}
+              expecteds={props.expecteds}
+              transs={props.transs}
+            />
+          </div>
         }
       />
     </Chrome>
@@ -117,5 +137,11 @@ function Budget(props: Props) {
 }
 
 export default function render(_: any, el: Element) {
-  renderWithState(connect(mapStateToProps)(Budget), el)
+  renderWithState(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(styleable(css)(Budget)),
+    el
+  )
 }
