@@ -62,7 +62,6 @@ class BudgetCatList extends React.Component {
     const { props, state } = this
     const rows = state.hideUnused
       ? formatBudgetLines(props).filter(row => {
-          debugger
           return !(
             (typeof row.expected === 'undefined' || row.expected.amt === 0) &&
             row.transsAmtSum === 0
