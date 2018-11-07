@@ -4,8 +4,10 @@ import type { Expected } from '../expected/types'
 import type { Trans } from '../trans/types'
 
 import PropTypes from 'prop-types'
+import styleable from 'react-styleable'
 import React from 'react'
 
+import css from './list.module.css'
 import ExpectedInputForm from './expected-input-form'
 import { formatBudgetLines } from './utils'
 import { formatUsd } from '../common/amt'
@@ -49,18 +51,47 @@ function renderRowData(props, row) {
   ]
 }
 
-function BudgetCatList(props: Props) {
-  return (
-    <List
-      month={props.month}
-      onEditSubmit={props.onEditSubmit}
-      renderEdit={renderEdit}
-      renderHeaderData={renderHeaderData}
-      renderRowData={renderRowData}
-      rows={formatBudgetLines(props)}
-      year={props.year}
-    />
-  )
+class BudgetCatList extends React.Component {
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      hideUnused: false
+    }
+  }
+  render() {
+    const { props, state } = this
+    const rows = state.hideUnused
+      ? formatBudgetLines(props).filter(row => {
+          debugger
+          return !(
+            (typeof row.expected === 'undefined' || row.expected.amt === 0) &&
+            row.transsAmtSum === 0
+          )
+        })
+      : formatBudgetLines(props)
+    return (
+      <div>
+        <div className={props.css.buttonRow}>
+          <button
+            onClick={_ => this.setState({ hideUnused: !state.hideUnused })}
+          >
+            {state.hideUnused ? 'Show' : 'Hide'} unused
+          </button>
+        </div>
+        <div className={state.hideUnused && props.css.tableFiltered}>
+          <List
+            month={props.month}
+            onEditSubmit={props.onEditSubmit}
+            renderEdit={renderEdit}
+            renderHeaderData={renderHeaderData}
+            renderRowData={renderRowData}
+            rows={rows}
+            year={props.year}
+          />
+        </div>
+      </div>
+    )
+  }
 }
 
-export default BudgetCatList
+export default styleable(css)(BudgetCatList)
