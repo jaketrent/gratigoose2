@@ -12,6 +12,7 @@ import * as actions from './actions'
 import css from './index.module.css'
 import Chrome from '../common/layouts/chrome'
 import List from './list'
+import { monthName } from './utils'
 import renderWithState from '../common/store/render'
 import Summary from './summary'
 import Title from '../common/components/title'
@@ -54,20 +55,6 @@ const Cols = styleable(css)(props => {
   )
 })
 
-const months = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec'
-]
 const Months = styleable(css)(props => {
   const month = parseInt(props.month, 10)
   const year = parseInt(props.year, 10)
@@ -80,7 +67,7 @@ const Months = styleable(css)(props => {
       >
         ◀
       </a>
-      <a href={`/${year}/${month}/budget`}>{months[month - 1]}</a>
+      <a href={`/${year}/${month}/budget`}>{monthName(month)}</a>
       <a
         href={`/${month === 12 ? year + 1 : year}/${
           month === 12 ? 1 : month + 1
@@ -102,11 +89,10 @@ const isThePast = (year, month) => {
   return isPastYear || isPastMonthCurrentYear
 }
 
-const HistoricalMarker = styleable(css)(
-  props =>
-    isThePast(props.year, props.month) ? (
-      <div className={props.css.historical}>(Historical)</div>
-    ) : null
+const HistoricalMarker = styleable(css)(props =>
+  isThePast(props.year, props.month) ? (
+    <div className={props.css.historical}>(Historical)</div>
+  ) : null
 )
 
 function handleReuseLastBudget(props, evt) {

@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import React from 'react'
 
 import * as actions from './actions'
+import { catName, monthName } from '../budget/utils'
 import Chrome from '../common/layouts/chrome'
 import InputForm from './input-form'
 import List from './list'
@@ -10,9 +11,13 @@ import Title from '../common/components/title'
 import Total from '../common/components/total'
 
 function mapStateToProps(state) {
+  const { month, year, catId } = state.routing.params
   return {
+    catName: catName(state.cat.cats, catId),
+    month,
+    transAmtTotal: state.trans.transs.reduce((total, t) => total + t.amt, 0),
     transs: state.trans.transs,
-    transAmtTotal: state.trans.transs.reduce((total, t) => total + t.amt, 0)
+    year
   }
 }
 
@@ -37,9 +42,15 @@ function handleOptionClick(props, optionName, trans) {
   if (typeof handler === 'function') handler(props, trans)
 }
 
-function Trans(props) {
+function CatYearMonthTrans(props) {
   return (
-    <Chrome title={<Title>Transactions</Title>}>
+    <Chrome
+      title={
+        <Title>
+          {props.catName} for {monthName(props.month)} {props.year}{' '}
+        </Title>
+      }
+    >
       <InputForm />
       <List
         onOptionClick={(optionName, trans) =>
@@ -53,5 +64,11 @@ function Trans(props) {
 }
 
 export default function render(store, el) {
-  renderWithState(connect(mapStateToProps, mapDispatchToProps)(Trans), el)
+  renderWithState(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(CatYearMonthTrans),
+    el
+  )
 }

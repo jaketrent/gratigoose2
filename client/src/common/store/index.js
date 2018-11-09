@@ -15,14 +15,16 @@ const logger = createLogger({
 const createStoreWithMiddleware = applyMiddleware(
   logger,
   alertDismissal,
-  sagaMiddleware,
+  sagaMiddleware
 )(createStore)
 
 const rootReducer = combineReducers(reducers)
 
-const store = createStoreWithMiddleware(rootReducer)
+const store = createStoreWithMiddleware(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+)
 
 sagaMiddleware.run(sagas)
 
 export default store
-

@@ -7,6 +7,7 @@ import React from 'react'
 import styleable from 'react-styleable'
 
 import css from './summary.module.css'
+import { catName, catType, findCat } from './utils'
 import { catTypesMap } from '../cat/types'
 import { formatUsd } from '../common/amt'
 import AmtTable from './amt-table'
@@ -18,14 +19,6 @@ type Props = {
   expecteds: Expected[],
   transs: Trans[]
 }
-
-const findCat = (cats: Cat[], catId): ?Cat => cats.find(cat => cat.id === catId)
-
-const catType = (cats: Cat[], catId): ?CatType =>
-  (findCat(cats, catId) || {}).type
-
-const catName = (cats: Cat[], catId): ?string =>
-  (findCat(cats, catId) || {}).name
 
 function Summary(props: Props) {
   const expectedIncome = props.expecteds
