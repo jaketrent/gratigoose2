@@ -28,7 +28,9 @@ export function findAll(transs, filter = x => x) {
 
 export function sinceDate(date, trans) {
   date = date
-    ? typeof date === 'string' ? Date.parse(date) : date.getTime()
+    ? typeof date === 'string'
+      ? Date.parse(date)
+      : date.getTime()
     : dateUtils.MIN
   const transDate = Date.parse(trans.date)
   return transDate > date
@@ -36,7 +38,8 @@ export function sinceDate(date, trans) {
 
 export function sumTranssAmtForCat(catId, transs) {
   return transs.reduce((sum, trans) => {
-    if (trans.catId === catId) sum += trans.amt
+    if (trans.catId === catId || (trans.cat && trans.cat.id === catId))
+      sum += trans.amt
     return sum
   }, 0)
 }
