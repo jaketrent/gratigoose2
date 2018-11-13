@@ -2,17 +2,17 @@
 import acctFindAll from '../../acct/middleware/find-all'
 import { isLoggedIn, logout } from '../../auth/middleware'
 import budget from '../../budget'
+import budgetCat from '../../budget/cat'
 import budgetFindInYearMonth from '../../budget/middleware/find-in-year-month'
+import budgetFindInYearMonthCat from '../../budget/middleware/find-in-year-month-cat'
 import catFindAll from '../../cat/middleware/find-all'
 import ingest from '../../ingest'
 import login from '../../auth/login'
 import transFindInYear from '../../trans/middleware/find-in-year'
 import transFindInYearMonth from '../../trans/middleware/find-in-year-month'
-import transFindInYearMonthCat from '../../trans/middleware/find-in-year-month-cat'
 import * as router from '../router'
 import tithing from '../../tithing'
 import trans from '../../trans'
-import transCat from '../../trans/cat'
 
 export function map(basePath: ?string) {
   router.route('/', _ => {
@@ -36,8 +36,8 @@ export function map(basePath: ?string) {
   router.route(
     '/:year/:month/cat/:catId',
     isLoggedIn,
-    transFindInYearMonthCat,
-    transCat
+    budgetFindInYearMonthCat,
+    budgetCat
   )
   router.route(
     '/:year/:month/budget',

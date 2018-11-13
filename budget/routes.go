@@ -68,6 +68,59 @@ func show(c *gin.Context) {
 	}})
 }
 
+func yearMonthCat(c *gin.Context) {
+	var expecteds []*expected.Expected
+	var transs []*trans.Trans
+	var err error
+	var year int
+	var month int
+	var catId int
+
+	db, _ := c.MustGet("db").(*sql.DB)
+	year, err = strconv.Atoi(c.Param("year"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "Bad year", Status: http.StatusBadRequest}},
+		})
+		return
+	}
+
+	month, err = strconv.Atoi(c.Param("month"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "Bad month", Status: http.StatusBadRequest}},
+		})
+		return
+	}
+
+	catId, err = strconv.Atoi(c.Param("catId"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, bad{
+			Errors: []clienterr{{Title: "Bad category", Status: http.StatusBadRequest}},
+		})
+		return
+	}
+
+	expecteds, err = expected.FindInYearMonthCat(db, year, month, catId)
+	if err != nil {
+		fmt.Println("error in year month cat expecteds", err)
+		c.JSON(http.StatusInternalServerError, bad{Errors: []clienterr{{Title: "Error retrieving expected", Status: http.StatusInternalServerError}}})
+		return
+	}
+
+	transs, err = trans.FindInYearMonthCat(db, year, month, catId)
+	if err != nil {
+		fmt.Println("error in year month cat transs", err)
+		c.JSON(http.StatusInternalServerError, bad{Errors: []clienterr{{Title: "Error retrieving transactions", Status: http.StatusInternalServerError}}})
+		return
+	}
+
+	c.JSON(http.StatusOK, ok{Data: data{
+		Expecteds: expecteds,
+		Transs:    transs,
+	}})
+}
+
 func reuseLastBudget(c *gin.Context) {
 	var expecteds []*expected.Expected
 	var err error
@@ -110,5 +163,6 @@ func reuseLastBudget(c *gin.Context) {
 
 func Mount(router *gin.Engine) {
 	router.GET("/api/v1/budget/year/:year/month/:month", show)
+	router.GET("/api/v1/budget/year/:year/month/:month/cat/:catId", yearMonthCat)
 	router.POST("/api/v1/budget/year/:year/month/:month/reuse", reuseLastBudget)
 }

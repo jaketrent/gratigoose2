@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import deserializeError from '../common/api/deserialize-error'
+import * as transUtils from '../trans/utils'
 
 export const findInYearMonth = {
   formatUrl({ month, year }) {
@@ -12,7 +13,29 @@ export const findInYearMonth = {
     return axios.get(api.formatUrl(args))
   },
   deserializeSuccess(res, args) {
-    return res.data.data
+    const { transs, expecteds } = res.data.data
+    return {
+      transs: transUtils.combineRelations(transs, args),
+      expecteds
+    }
+  },
+  deserializeError
+}
+
+export const findInYearMonthCat = {
+  formatUrl({ catId, month, year }) {
+    return `/api/v1/budget/year/${year}/month/${month}/cat/${catId}`
+  },
+  request(args) {
+    const { api } = args
+    return axios.get(api.formatUrl(args))
+  },
+  deserializeSuccess(res, args) {
+    const { transs, expecteds } = res.data.data
+    return {
+      transs: transUtils.combineRelations(transs, args),
+      expecteds
+    }
   },
   deserializeError
 }

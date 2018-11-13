@@ -79,18 +79,6 @@ export const findInYearMonth = {
   deserializeError
 }
 
-export const findInYearMonthCat = {
-  formatUrl({ catId, month, year }) {
-    return `/api/v1/trans/year/${year}/month/${month}/cat/${catId}`
-  },
-  request(args) {
-    const { api } = args
-    return axios.get(api.formatUrl(args))
-  },
-  deserializeSuccess,
-  deserializeError
-}
-
 export const update = {
   formatUrl({ trans }) {
     return `/api/v1/trans/${trans.id}`

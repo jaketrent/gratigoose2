@@ -97,7 +97,7 @@ order by trans_date desc
 	return transs, nil
 }
 
-func findInYearMonthCat(db *sql.DB, year int, month int, catId int) ([]*Trans, error) {
+func FindInYearMonthCat(db *sql.DB, year int, month int, catId int) ([]*Trans, error) {
 	const query = `
 select id
 , trans_date

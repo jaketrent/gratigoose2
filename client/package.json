@@ -5,6 +5,8 @@
   "dependencies": {
     "axios": "^0.13.1",
     "d3": "^4.2.6",
+    "d3-scale": "^2.1.2",
+    "d3-shape": "^1.2.2",
     "focus-trap-react": "^3.0.1",
     "page": "^1.7.1",
     "prop-types": "^15.6.0",

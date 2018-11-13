@@ -8,6 +8,8 @@ export const TYPES = types('budget', [
   'CREATE_EXPECTED_ERROR',
   'FIND_IN_YEAR_MONTH',
   'FIND_IN_YEAR_MONTH_SUCCESS',
+  'FIND_IN_YEAR_MONTH_CAT',
+  'FIND_IN_YEAR_MONTH_CAT_SUCCESS',
   'REUSE_LAST_BUDGET',
   'UPDATE_EXPECTED',
   'UPDATE_EXPECTED_SUCCESS',
@@ -58,6 +60,32 @@ export function findInYearMonthSuccess({
     month,
     transs,
     year
+  }
+}
+
+export function findInYearMonthCat({ month, year, catId }) {
+  return {
+    type: TYPES.FIND_IN_YEAR_MONTH_CAT,
+    month,
+    year,
+    catId
+  }
+}
+
+export function findInYearMonthCatSuccess({
+  catId,
+  expecteds,
+  month,
+  transs,
+  year
+}) {
+  return {
+    type: TYPES.FIND_IN_YEAR_MONTH_CAT_SUCCESS,
+    catId,
+    expecteds,
+    month,
+    year,
+    transs
   }
 }
 

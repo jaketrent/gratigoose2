@@ -21,6 +21,23 @@ export function* findInYearMonth({ month, year }) {
   // TODO: impl and error check
 }
 
+export function* findInYearMonthCat({ month, year, catId }) {
+  const { accts, cats } = yield* transSagas.loadTransRelations()
+  const { transs, expecteds } = yield call(request, {
+    accts,
+    api: api.findInYearMonthCat,
+    catId,
+    cats,
+    month,
+    year
+  })
+
+  yield put(
+    actions.findInYearMonthCatSuccess({ catId, month, transs, year, expecteds })
+  )
+  // TODO: impl and error check
+}
+
 export function* createExpected(args) {
   try {
     const { cats } = yield* transSagas.loadTransRelations()

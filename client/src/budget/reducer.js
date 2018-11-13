@@ -54,6 +54,7 @@ export default createWithHandlers(
   {
     [TYPES.CREATE_EXPECTED_SUCCESS]: createExpectedSuccess,
     [TYPES.FIND_IN_YEAR_MONTH_SUCCESS]: findYearMonthSuccess,
+    [TYPES.FIND_IN_YEAR_MONTH_CAT_SUCCESS]: findYearMonthSuccess,
     [TYPES.UPDATE_EXPECTED_SUCCESS]: updateExpectedSuccess
   },
   initialState

@@ -1,0 +1,37 @@
+.budgetSpace {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 0;
+}
+.budgetSpaceCols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(300px, 1fr));
+  gap: 16px;
+}
+.lineChart {
+  max-width: 300px;
+}
+.line {
+  stroke: var(--colorAccent);
+  stroke-width: 3;
+  fill: none;
+}
+.zeroLine {
+  stroke: black;
+  stroke-width: 1;
+  fill: none;
+}
+.zeroSpace {
+  fill: rgba(255, 0, 0, 0.1);
+}
+.bigNum {
+  text-align: center;
+}
+.bigNumLabel {
+  text-transform: uppercase;
+  font-weight: 100;
+  margin-bottom: 0.5em;
+}
+.bigNumNum {
+  font-size: 2.5em;
+}

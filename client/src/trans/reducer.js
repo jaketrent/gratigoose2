@@ -56,7 +56,6 @@ export default createWithHandlers(
     [TYPES.FIND_ALL_SUCCESS]: findSuccess,
     [TYPES.FIND_IN_YEAR_SUCCESS]: findSuccess,
     [TYPES.FIND_IN_YEAR_MONTH_SUCCESS]: findSuccess,
-    [TYPES.FIND_IN_YEAR_MONTH_CAT_SUCCESS]: findSuccess,
     [TYPES.UPDATE_SUCCESS]: updateSuccess
   },
   initialState

@@ -3,9 +3,10 @@ package trans
 import (
 	"database/sql"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ok struct {
@@ -112,7 +113,7 @@ func yearMonthCat(c *gin.Context) {
 		return
 	}
 
-	transs, err := findInYearMonthCat(db, year, month, catId)
+	transs, err := FindInYearMonthCat(db, year, month, catId)
 	if err == nil {
 		c.JSON(http.StatusOK, ok{
 			Data: transs,
@@ -221,5 +222,4 @@ func Mount(router *gin.Engine) {
 	router.GET("/api/v1/trans", list)
 	router.GET("/api/v1/trans/year/:year", year)
 	router.GET("/api/v1/trans/year/:year/month/:month", yearMonth)
-	router.GET("/api/v1/trans/year/:year/month/:month/cat/:catId", yearMonthCat)
 }
