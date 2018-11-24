@@ -10,6 +10,7 @@ func insert(db *sql.DB, expected *Expected) (*Expected, error) {
  insert into expected
 ( cat_id
 , amt
+, notes
 , year
 , month
 , date
@@ -19,12 +20,13 @@ func insert(db *sql.DB, expected *Expected) (*Expected, error) {
 , $3
 , $4
 , $5
+, $6
 ) returning id
 , created
 , updated
 `
 	date := time.Date(expected.Year, time.Month(expected.Month), 1, 0, 0, 0, 0, time.UTC)
-	err := db.QueryRow(query, expected.CatId, expected.Amt, expected.Year, expected.Month, date).Scan(&expected.Id, &expected.Created, &expected.Updated)
+	err := db.QueryRow(query, expected.CatId, expected.Amt, expected.Notes, expected.Year, expected.Month, date).Scan(&expected.Id, &expected.Created, &expected.Updated)
 	return expected, err
 }
 
@@ -32,8 +34,9 @@ func update(db *sql.DB, expected *Expected) (*Expected, error) {
 	const query = `
 update expected
 set amt = $1
-, updated = $2
-where id = $3
+, notes = $2
+, updated = $3
+where id = $4
 returning cat_id
 , year
 , month
@@ -41,7 +44,7 @@ returning cat_id
 , created
 , updated
 `
-	err := db.QueryRow(query, expected.Amt, time.Now(), expected.Id).Scan(&expected.CatId, &expected.Year, &expected.Month, &expected.Date, &expected.Created, &expected.Updated)
+	err := db.QueryRow(query, expected.Amt, expected.Notes, time.Now(), expected.Id).Scan(&expected.CatId, &expected.Year, &expected.Month, &expected.Date, &expected.Created, &expected.Updated)
 	return expected, err
 }
 
@@ -50,6 +53,7 @@ func FindInYearMonth(db *sql.DB, year int, month int) ([]*Expected, error) {
 select id
 , cat_id
 , amt
+, notes
 , year
 , month
 , date
@@ -69,7 +73,7 @@ and month = $2
 	expecteds := make([]*Expected, 0)
 	for rows.Next() {
 		var expected Expected
-		if err := rows.Scan(&expected.Id, &expected.CatId, &expected.Amt, &expected.Year, &expected.Month, &expected.Date, &expected.Created, &expected.Updated); err != nil {
+		if err := rows.Scan(&expected.Id, &expected.CatId, &expected.Amt, &expected.Notes, &expected.Year, &expected.Month, &expected.Date, &expected.Created, &expected.Updated); err != nil {
 			return nil, err
 		}
 		expecteds = append(expecteds, &expected)
@@ -82,6 +86,7 @@ func FindInYearMonthCat(db *sql.DB, year int, month int, catId int) ([]*Expected
 select id
 , cat_id
 , amt
+, notes
 , year
 , month
 , date
@@ -102,7 +107,7 @@ and cat_id = $3
 	expecteds := make([]*Expected, 0)
 	for rows.Next() {
 		var expected Expected
-		if err := rows.Scan(&expected.Id, &expected.CatId, &expected.Amt, &expected.Year, &expected.Month, &expected.Date, &expected.Created, &expected.Updated); err != nil {
+		if err := rows.Scan(&expected.Id, &expected.CatId, &expected.Amt, &expected.Notes, &expected.Year, &expected.Month, &expected.Date, &expected.Created, &expected.Updated); err != nil {
 			return nil, err
 		}
 		expecteds = append(expecteds, &expected)
@@ -115,6 +120,7 @@ func CopyFrom(db *sql.DB, fromYear int, fromMonth int, toYear int, toMonth int) 
 insert into expected
 ( cat_id
 , amt
+, notes
 , year
 , month
 , date
@@ -129,6 +135,7 @@ and month = $2
 returning id
 , cat_id
 , amt
+, notes
 , year
 , month
 , date
@@ -146,7 +153,7 @@ returning id
 	expecteds := make([]*Expected, 0)
 	for rows.Next() {
 		var expected Expected
-		if err := rows.Scan(&expected.Id, &expected.CatId, &expected.Amt, &expected.Year, &expected.Month, &expected.Date, &expected.Created, &expected.Updated); err != nil {
+		if err := rows.Scan(&expected.Id, &expected.CatId, &expected.Amt, &expected.Notes, &expected.Year, &expected.Month, &expected.Date, &expected.Created, &expected.Updated); err != nil {
 			return nil, err
 		}
 		expecteds = append(expecteds, &expected)

@@ -9,6 +9,7 @@ type Expected struct {
 	Id      int         `json:"id"`
 	CatId   int         `json:"catId"`
 	Amt     json.Number `json:"amt"`
+	Notes   *string     `json:"notes"`
 	Year    int         `json:"year"`
 	Month   int         `json:"month"`
 	Date    time.Time   `json:"date"`

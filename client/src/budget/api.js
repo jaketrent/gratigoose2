@@ -47,6 +47,7 @@ export const createExpected = {
   serialize(args) {
     return {
       amt: args.amt,
+      notes: args.notes,
       catId: args.catId,
       year: parseInt(args.year, 10),
       month: parseInt(args.month, 10)
@@ -80,9 +81,10 @@ export const updateExpected = {
   formatUrl({ expected }) {
     return `/api/v1/expected/${expected.id}`
   },
-  serialize({ amt, expected }) {
+  serialize({ amt, notes, expected }) {
     return {
       amt,
+      notes,
       id: expected.id
     }
   },

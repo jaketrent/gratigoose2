@@ -1,4 +1,4 @@
-@import "../styles/media.css";
+@import '../styles/media.css';
 
 .root {
 }
@@ -17,7 +17,7 @@
   composes: field;
 }
 .btn {
-  composes: screenreader-only from "../styles/accessibility.module.css";
+  composes: screenreader-only from '../styles/accessibility.module.css';
 }
 
 @media (--small) {

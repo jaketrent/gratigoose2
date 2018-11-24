@@ -43,6 +43,7 @@ function renderRowData(props, row) {
     <Link
       href={`/${props.year}/${props.month}/cat/${row.cat.id}`}
       tabIndex="-1"
+      {...row.expected && { title: row.expected.notes }}
     >
       {row.cat.name}
     </Link>,
