@@ -5,6 +5,10 @@ build:
     - go
     - node
 
+release:
+  command:
+    - goose up
+
 run:
   web: gratigoose2
 
