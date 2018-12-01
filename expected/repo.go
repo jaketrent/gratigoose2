@@ -126,6 +126,7 @@ insert into expected
 , date
 ) select cat_id
 , amt
+, notes
 , $3
 , $4
 , $5

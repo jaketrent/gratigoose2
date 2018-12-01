@@ -152,7 +152,7 @@ func reuseLastBudget(c *gin.Context) {
 	expecteds, err = expected.CopyFrom(db, lastYear, lastMonth, thisYear, thisMonth)
 	if err != nil {
 		fmt.Println("error in expecteds copying", err)
-		c.JSON(http.StatusInternalServerError, bad{Errors: []clienterr{{Title: "Error retrieving expected", Status: http.StatusInternalServerError}}})
+		c.JSON(http.StatusInternalServerError, bad{Errors: []clienterr{{Title: "Error copying expecteds", Status: http.StatusInternalServerError}}})
 		return
 	}
 
