@@ -17,7 +17,7 @@ const initialState = {
   acctSearch: '',
   catSearch: '',
   trans: {
-    date: '2018-',
+    date: new Date().getFullYear() + '-',
     desc: '',
     amt: '',
     acct: {},
