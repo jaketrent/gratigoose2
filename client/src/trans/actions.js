@@ -22,10 +22,10 @@ export const TYPES = types('trans', [
   'DESTROY_ERROR'
 ])
 
-export function create(trans) {
+export function create(transs) {
   return {
     type: TYPES.CREATE,
-    trans
+    transs
   }
 }
 

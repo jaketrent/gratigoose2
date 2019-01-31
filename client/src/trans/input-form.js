@@ -45,7 +45,12 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     submit(actionName, trans) {
-      dispatch(actions[actionName](trans))
+      if (actionName === 'create') {
+        dispatch(actions[actionName]([trans]))
+      } else {
+        // TODO: future - convert update to use array as well
+        dispatch(actions[actionName](trans))
+      }
     },
     searchAccts(term) {
       dispatch(acctActions.search(term))
@@ -224,5 +229,8 @@ Inputform.defaultProps = {
 }
 
 export default styleable(css)(
-  connect(mapStateToProps, mapDispatchToProps)(Inputform)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Inputform)
 )

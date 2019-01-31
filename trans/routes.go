@@ -132,21 +132,21 @@ func create(c *gin.Context) {
 	db, _ := c.MustGet("db").(*sql.DB)
 
 	var err error
-	var trans *Trans
-	err = c.BindJSON(&trans)
+	var transs []*Trans
+	err = c.BindJSON(&transs)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, bad{
 			Errors: []clienterr{{Title: "Bad transaction", Status: http.StatusBadRequest}},
 		})
-		fmt.Println("trans create req error", err)
+		fmt.Println("transs create req error", err)
 		return
 	}
-	trans, err = insert(db, trans)
+	transs, err = insert(db, transs)
 
 	if err == nil {
 		c.JSON(http.StatusCreated, ok{
-			Data: []*Trans{trans},
+			Data: transs,
 		})
 	} else {
 		c.JSON(http.StatusInternalServerError, err)

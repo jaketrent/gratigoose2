@@ -134,8 +134,16 @@ order by trans_date desc
 	return transs, nil
 }
 
-func insert(db *sql.DB, trans *Trans) (*Trans, error) {
-	const query = `
+func insert(db *sql.DB, transs []*Trans) ([]*Trans, error) {
+
+  var tx *sql.Tx
+  var err error
+  tx, err = db.Begin()
+
+  for i := range transs {
+    trans := transs[i]
+
+    const query = `
 insert into trans
 ( trans_date
 , description
@@ -159,9 +167,17 @@ insert into trans
 , created
 , updated
 `
-	date := time.Date(trans.Year, time.Month(trans.Month), trans.Day, 0, 0, 0, 0, time.UTC)
-	err := db.QueryRow(query, date, trans.Desc, trans.Amt, trans.AcctId, trans.CatId, trans.Year, trans.Month, trans.Day).Scan(&trans.Id, &trans.Date, &trans.Created, &trans.Updated)
-	return trans, err
+    date := time.Date(trans.Year, time.Month(trans.Month), trans.Day, 0, 0, 0, 0, time.UTC)
+    err = tx.QueryRow(query, date, trans.Desc, trans.Amt, trans.AcctId, trans.CatId, trans.Year, trans.Month, trans.Day).Scan(&trans.Id, &trans.Date, &trans.Created, &trans.Updated)
+    if err != nil {
+      err = tx.Rollback()
+      break
+    }
+  }
+
+  err = tx.Commit()
+
+  return transs, err
 }
 
 func update(db *sql.DB, trans *Trans) (*Trans, error) {

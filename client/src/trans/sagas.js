@@ -6,10 +6,15 @@ import * as api from './api'
 import * as catSagas from '../cat/sagas'
 import request from '../common/api/request'
 
-export function* create({ trans }) {
+export function* create({ transs }) {
   try {
     const { accts, cats } = yield* loadTransRelations()
-    const des = yield call(request, { accts, api: api.create, cats, trans })
+    const des = yield call(request, {
+      accts,
+      api: api.create,
+      cats,
+      transs
+    })
 
     yield put(actions.createSuccess(des))
   } catch (errors) {
