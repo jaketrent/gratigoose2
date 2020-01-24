@@ -29,18 +29,3 @@ export const catName = (cats: Cat[], catId): ?string =>
 
 const findCat = (cats: Cat[], catId): ?Cat => cats.find(cat => cat.id === catId)
 
-export const monthName = (month: number): ?string => months[month - 1]
-const months = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec'
-]

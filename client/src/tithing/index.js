@@ -3,6 +3,7 @@ import React from 'react'
 
 import Chrome from '../common/layouts/chrome'
 import List from '../trans/list'
+import Years from '../common/components/years'
 import renderWithState from '../common/store/render'
 import SectionTitle from '../common/components/section-title'
 import Total from '../common/components/total'
@@ -22,16 +23,28 @@ function Tithing(props) {
   const transsSinceLastTithe = props.transs
     .filter(transUtils.sinceDate.bind(null, lastTithe ? lastTithe.date : null))
     .filter(t => t.amt > 0)
-  const excludedSinceLastTithe = transsSinceLastTithe
-    .filter(utils.isExcludedFromTithing)
-  const excludedTotal = excludedSinceLastTithe.reduce((sum, t) => sum + t.amt, 0)
-  const incomeSinceLastTithe = transsSinceLastTithe
-    .filter(t => !utils.isExcludedFromTithing(t))
+  const excludedSinceLastTithe = transsSinceLastTithe.filter(
+    utils.isExcludedFromTithing
+  )
+  const excludedTotal = excludedSinceLastTithe.reduce(
+    (sum, t) => sum + t.amt,
+    0
+  )
+  const incomeSinceLastTithe = transsSinceLastTithe.filter(
+    t => !utils.isExcludedFromTithing(t)
+  )
   const incomeTotal = incomeSinceLastTithe.reduce((sum, t) => sum + t.amt, 0)
   const tithingOwed = incomeTotal / 10
 
   return (
-    <Chrome title={<Title>Tithing</Title>}>
+    <Chrome
+      title={
+        <Title>
+          Tithing
+          <Years year={props.year} />
+        </Title>
+      }
+    >
       <SectionTitle>Last Tithe</SectionTitle>
       <List transs={lastTithe ? [lastTithe] : []} />
 

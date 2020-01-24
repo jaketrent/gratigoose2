@@ -23,3 +23,19 @@ export function toDate(dateStr) {
   date.setDate(day)
   return date
 }
+
+export const monthName = month => months[month - 1]
+const months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+]

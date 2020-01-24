@@ -12,7 +12,8 @@ import * as actions from './actions'
 import css from './index.module.css'
 import Chrome from '../common/layouts/chrome'
 import List from './list'
-import { monthName } from './utils'
+import Months from '../common/components/months'
+import { monthName } from '../common/date'
 import renderWithState from '../common/store/render'
 import Summary from './summary'
 import Title from '../common/components/title'
@@ -51,30 +52,6 @@ const Cols = styleable(css)(props => {
     <div className={props.css.cols}>
       {props.left}
       {props.right}
-    </div>
-  )
-})
-
-const Months = styleable(css)(props => {
-  const month = parseInt(props.month, 10)
-  const year = parseInt(props.year, 10)
-  return (
-    <div className={props.css.months}>
-      <a
-        href={`/${month === 1 ? year - 1 : year}/${
-          month === 1 ? 12 : month - 1
-        }/budget`}
-      >
-        ◀
-      </a>
-      <a href={`/${year}/${month}/budget`}>{monthName(month)}</a>
-      <a
-        href={`/${month === 12 ? year + 1 : year}/${
-          month === 12 ? 1 : month + 1
-        }/budget`}
-      >
-        ▶
-      </a>
     </div>
   )
 })
@@ -142,10 +119,7 @@ function Budget(props: Props) {
 
 export default function render(_: any, el: Element) {
   renderWithState(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps
-    )(styleable(css)(Budget)),
+    connect(mapStateToProps, mapDispatchToProps)(styleable(css)(Budget)),
     el
   )
 }

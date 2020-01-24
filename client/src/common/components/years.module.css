@@ -1,0 +1,30 @@
+.years {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 0.5em;
+  padding-left: 2em;
+  font-size: 0.5em;
+}
+.years a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+.aside {
+  position: fixed;
+  top: 64px;
+  right: 0;
+  padding-right: 2em;
+  width: 33vw;
+}
+.historical {
+  font-size: 3em;
+  letter-spacing: 0.125em;
+  font-style: italic;
+  border: 3px solid var(--colorAccent);
+  color: var(--colorAccentDark);
+  text-align: center;
+  padding: 0.25em 1em;
+  margin-bottom: 12px;
+}

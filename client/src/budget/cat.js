@@ -5,7 +5,7 @@ import React from 'react'
 import styleable from 'react-styleable'
 
 import * as actions from '../trans/actions'
-import { catName, monthName } from './utils'
+import { catName } from './utils'
 import Chrome from '../common/layouts/chrome'
 import css from './cat.module.css'
 import { formatUsd } from '../common/amt'
@@ -13,7 +13,7 @@ import InputForm from '../trans/input-form'
 import List from '../trans/list'
 import renderWithState from '../common/store/render'
 import Title from '../common/components/title'
-import { toDate } from '../common/date'
+import { toDate, monthName } from '../common/date'
 import Total from '../common/components/total'
 
 function mapStateToProps(state) {
