@@ -7,10 +7,12 @@ import InputForm from './input-form'
 import List from './list'
 import renderWithState from '../common/store/render'
 import Title from '../common/components/title'
+import Years from '../common/components/years'
 
 function mapStateToProps(state) {
   return {
-    transs: state.trans.transs
+    transs: state.trans.transs,
+    year: state.routing.params.year
   }
 }
 
@@ -37,7 +39,14 @@ function handleOptionClick(props, optionName, trans) {
 
 function Trans(props) {
   return (
-    <Chrome title={<Title>Transactions</Title>}>
+    <Chrome
+      title={
+        <Title>
+          Transactions
+          <Years year={props.year} />
+        </Title>
+      }
+    >
       <InputForm />
       <List
         onOptionClick={(optionName, trans) =>
