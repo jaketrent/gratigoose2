@@ -41,7 +41,7 @@ function Tithing(props) {
       title={
         <Title>
           Tithing
-          <Years year={props.year} />
+          <Years year={props.year} href="/tithing" />
         </Title>
       }
     >
